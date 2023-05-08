@@ -55,7 +55,7 @@ make
 sudo make install
 
 ```
-
+![screenshot](https://github.com/walaa-amer/VSD-HDP/blob/main/images/ngspice%20snap.JPG)
 </details>
 
 <details>
