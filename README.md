@@ -17,8 +17,7 @@ sudo apt-get install build-essential clang bison flex \
 make 
 sudo make install
 ```
-
-![screenshot](https://github.com/walaa-amer/VSD-HDP/blob/main/images/opensta%20snap.JPG)
+![screenshot](https://github.com/walaa-amer/VSD-HDP/blob/main/images/yosys%20snap.JPG)
 </details>
 
 <details>
@@ -38,7 +37,7 @@ cd build
 cmake ..
 make
 ```
-
+![screenshot](https://github.com/walaa-amer/VSD-HDP/blob/main/images/opensta%20snap.JPG)
 </details>
 
 <details>
