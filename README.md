@@ -1,11 +1,4 @@
-# VSD-HDP
-
-## Day 0
-
-### Tools installed:
-<details>
-<summary>Yosys</summary>
-
+Installed it following these steps:
 ```
 git clone https://github.com/YosysHQ/yosys.git
 cd yosys-master 
