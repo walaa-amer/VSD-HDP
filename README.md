@@ -105,3 +105,41 @@ sudo apt-get install libncurses-dev
 ```
 
 </details>
+
+## Day 1
+### Simulation using iverilog and visualization using gtkwave:
+Command:
+```
+iverilog good_mux.v tb_good_mux.v
+./a.out
+gtkwave tb_good_mux.vcd
+```
+![lab2 iverilog](https://github.com/walaa-amer/VSD-HDP/assets/85279771/49f31aad-81f8-46f6-88c8-d954f65f992e)
+
+Results:
+
+![lab2 gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/07dad12f-d621-45c0-970a-01613311322f)
+
+### Synthesis using yosys:
+
+Reading input Verilog and lib files on the yosys prompt:
+```
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog good_mux.v
+synth -top good_mux
+abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+
+Results:
+![lab2 yosys 2](https://github.com/walaa-amer/VSD-HDP/assets/85279771/6baa3704-14f0-4f93-8a5a-49f9fb7bf44e)
+
+Generating the netlist on the yosys prompt:
+```
+write_verilog -noattr good_mux_netlist.v
+!vim good_mux_netlist.v
+```
+
+Results:
+![lab2 yosys 3](https://github.com/walaa-amer/VSD-HDP/assets/85279771/5c31de61-2caa-477d-9b16-a3760bbfde73)
+
