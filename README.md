@@ -139,9 +139,8 @@ show
 Results:
      
 ![lab2 yosys 2](https://github.com/walaa-amer/VSD-HDP/assets/85279771/6baa3704-14f0-4f93-8a5a-49f9fb7bf44e)
-</details>
-<details>
-<summary>Generating the netlist on the yosys prompt:</summary>
+
+Generating the netlist on the yosys prompt:
     
 ```
 write_verilog -noattr good_mux_netlist.v
