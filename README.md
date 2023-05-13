@@ -245,6 +245,7 @@ gtkwave tb_dff_asyncres.vcd
 Results:
     ![lab 5 l3 flop iverilog simulation gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/e7a487cf-97cd-46d5-a95b-cd1f2b0066ea)
 A few remarquable points seen in this simulation:
+    
     - In this instance in time, Q goes high when the clock goes high:
     ![lab 5 l3 flop iverilog simulation asyncres](https://github.com/walaa-amer/VSD-HDP/assets/85279771/08e855d1-0608-47ba-b07e-e9cdfb029146)
 
@@ -264,6 +265,7 @@ Results:
 ![lab 5 l3 flop iverilog simulation gtkwave async set](https://github.com/walaa-amer/VSD-HDP/assets/85279771/43b70c92-c491-4c8a-acae-afe0400b1c1c)
 
 A few remarquable points seen in this simulation:
+    
     - In this instance in time, Q goes high when the clock goes high once async set is set to low:
     ![lab 5 l3 flop iverilog simulation asyncset](https://github.com/walaa-amer/VSD-HDP/assets/85279771/33f4a417-f33b-4167-9fa9-62557402b130)
 
@@ -286,6 +288,7 @@ Results:
 
 
 A few remarquable points seen in this simulation:
+    
     - In this instance in time, Q goes low only when the clock goes high when sync reset is set to high:
     ![lab 5 l3 flop iverilog simulation asyncset](https://github.com/walaa-amer/VSD-HDP/assets/85279771/33f4a417-f33b-4167-9fa9-62557402b130)
 
