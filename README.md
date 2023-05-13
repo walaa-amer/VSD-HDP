@@ -108,7 +108,7 @@ sudo apt-get install libncurses-dev
 
 ## Day 1
 <details>
-<summary>Simulation using iverilog and visualization using gtkwave:</summary>
+<summary>Simulation using iverilog and visualization using gtkwave</summary>
 Command:
     
 ```
@@ -124,7 +124,7 @@ Results:
 ![lab2 gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/07dad12f-d621-45c0-970a-01613311322f)
 </details>
  <details>
-<summary>Synthesis using yosys:</summary>
+<summary>Synthesis using yosys</summary>
 
 Reading input Verilog and lib files on the yosys prompt:
     
@@ -156,7 +156,7 @@ Results:
 ## Day 2
 
  <details>
-<summary>Synthesis of multiple modules:</summary>
+<summary>Synthesis of multiple modules</summary>
     
 Commands:
     
@@ -180,7 +180,7 @@ Hierarchy:
     
 </details>
  <details>
-<summary>Synthesis of flattened modules:</summary>
+<summary>Synthesis of flattened modules</summary>
     
 Flattening the modules will replace the submodules in the netlist by the actual gates being used directly into the netlist.
     
@@ -209,7 +209,7 @@ show
 </details>
     
 <details>
-<summary>Submodule-level synthesis:</summary>
+<summary>Submodule-level synthesis</summary>
 This type of synthesis is useful when you have multiple instances of the same submodule, so it would be useful to su=ynthesize it once and replicate its netlist as many times as needed. It is also useful when using the divide-and-conquer approach for massive designs.
     
 Commands:
@@ -230,7 +230,7 @@ Hierarchy:
 </details>
 
 <details>
-<summary>FLOPS:</summary>
+<summary>FLOPS</summary>
 FLOPS are memory components used to eliminate glitching effect between combinational circuits.
 
 
