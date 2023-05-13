@@ -358,4 +358,36 @@ The AND gate with an inverter before the input replaces a 2-1 mux controller by 
 
 
 </details>  
+    
+<details>
+<summary>Optimization of multiplying by 2</summary> 
+
+Multiplication by 2 is basically the input appended by '0' at the end.
+
+Using the following commands:
+    
+    ```
+    read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+    read_verilog mult_2.v
+    synth -top mul2
+    abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+    show
+    ```
+Running abc is not necessary since there are no cells in the design.
+    
+    
+Hierarchy:
+![l4 mul2 synth](https://github.com/walaa-amer/VSD-HDP/assets/85279771/d9119ac1-fc18-4fcb-96e9-d033de8acd73)
+
+    
+Thus, a special case where this optimization i useful is when multiplying by 8:
+    y = a x 9 = a x (8 + 1) = a x 8 + a x 1
+Which means that is a appended by 3 '0's is added with the 3-bit input itself, so the last 3 bits of y are connected to the input and the last 3 bits of y are also connected to a.
+    
+    The synthesis hierarchy results and the verilog netlist code show that:
+![l4 mul8 synth](https://github.com/walaa-amer/VSD-HDP/assets/85279771/e1328216-38f0-4aea-8043-c04ee5152545)
+![l4 mul8 netlist verilog result](https://github.com/walaa-amer/VSD-HDP/assets/85279771/654cec55-fffc-42b8-b175-0d9753fb08ab)
+
+    
+</details>  
 </details>
