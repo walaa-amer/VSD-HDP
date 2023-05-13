@@ -228,3 +228,21 @@ Hierarchy:
 ![lab 5 submodule show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/8e3696d5-5a18-4cb3-9174-2b41c1c303f3)
 
 </details>
+
+<details>
+<summary>FLOPS:</summary>
+FLOPS are memory components used to eliminate glitching effect between combinational circuits.
+
+
+iverilog simulation commands:
+
+```
+iverilog dff_asyncres.v tb_dff_asyncres.v
+./a.out
+gtkwave tb_dff_asyncres.vcd
+```
+
+Results:
+    ![lab 5 l3 flop iverilog simulation gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/e7a487cf-97cd-46d5-a95b-cd1f2b0066ea)
+
+</details>
