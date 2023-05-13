@@ -338,7 +338,7 @@ Inverter added for active high reset of the DFF
 
 </details>    
     
-    <details>
+<details>
 <summary>Synthesis of synchronous set:</summary>  
 
 Using the following commands:
