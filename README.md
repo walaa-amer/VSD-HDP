@@ -152,3 +152,70 @@ Results:
 ![lab2 yosys 3](https://github.com/walaa-amer/VSD-HDP/assets/85279771/5c31de61-2caa-477d-9b16-a3760bbfde73)
 
 </details>
+
+## Day 2
+
+ <details>
+<summary>Synthesis of multiple modules:</summary>
+    
+Commands:
+    
+```
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog multiple_modules.v
+synth -top multiple_modules
+abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+write_verilog -noattr multiple_modules_netlist.v
+!vim multiple_modules_netlist.v
+    
+ ```
+    ![lab 5  synth commands](https://github.com/walaa-amer/VSD-HDP/assets/85279771/f9595922-a9f1-412d-abc8-699641b1417c)
+
+ Results:
+    ![lab 5 submodule show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/a9f02479-9eba-4b2b-b93b-772a960b05d3)
+![lab 5 module hier](https://github.com/walaa-amer/VSD-HDP/assets/85279771/2884cd34-ef5b-4036-92e1-4234089838e8)
+    
+</details>
+ <details>
+<summary>Synthesis of flattened modules:</summary>
+    
+Flattening the modules will replace the submodules in the netlist by the actual gates being used directly into the netlist.
+    Commands:
+    ```
+    write_verilog -noattr multiple_modules_flat.v
+!vim multiple_modules_flat.v
+    ```
+    Results:
+    ![lab 5 flattened submodules](https://github.com/walaa-amer/VSD-HDP/assets/85279771/8df3b0f0-30f4-4ecf-85a4-1202eb74edd6)
+Show results:
+    ```
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog multiple_modules.v
+synth -top multiple_modules
+abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+flatten
+show
+    ```
+    ![lab 5 flattened submodules show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/df11cbd7-d484-4499-8732-eed3c184b7b3)
+
+    </details>
+    
+    <details>
+<summary>Submodule-level synthesis:</summary>
+This type of synthesis is useful when you have multiple instances of the same submodule, so it would be useful to su=ynthesize it once and replicate its netlist as many times as needed. It is also useful when using the divide-and-conquer approach for massive designs.
+Commands:
+```
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog multiple_modules.v
+synth -top sub_module1
+abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+Results:
+![lab 5 submodule synth results](https://github.com/walaa-amer/VSD-HDP/assets/85279771/185a2e9f-b459-427e-834d-f9f04b97fd6f)
+Hierarchy:
+![lab 5 submodule show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/8e3696d5-5a18-4cb3-9174-2b41c1c303f3)
+
+
+</details>
