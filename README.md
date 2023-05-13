@@ -298,7 +298,7 @@ A few remarquable points seen in this simulation:
     
 </details>  
 <details>
-<summary>Synthesis of asynchronous reset:</summary>  
+<summary>Synthesis of asynchronous reset</summary>  
 
 Using the following commands:
     
@@ -318,7 +318,7 @@ Inverter added for active high reset of the DFF
 </details>    
     
 <details>
-<summary>Synthesis of asynchronous set:</summary>  
+<summary>Synthesis of asynchronous set</summary>  
 
 Using the following commands:
     
@@ -339,7 +339,7 @@ Inverter added for active high reset of the DFF
 </details>    
     
 <details>
-<summary>Synthesis of synchronous set:</summary>  
+<summary>Synthesis of synchronous set</summary>  
 
 Using the following commands:
     
