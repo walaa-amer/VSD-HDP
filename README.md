@@ -173,7 +173,9 @@ write_verilog -noattr multiple_modules_netlist.v
     ![lab 5  synth commands](https://github.com/walaa-amer/VSD-HDP/assets/85279771/f9595922-a9f1-412d-abc8-699641b1417c)
 
  Results:
-    ![lab 5 submodule show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/a9f02479-9eba-4b2b-b93b-772a960b05d3)
+![lab 5 submodule show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/a9f02479-9eba-4b2b-b93b-772a960b05d3)
+
+Hierarchy:
 ![lab 5 module hier](https://github.com/walaa-amer/VSD-HDP/assets/85279771/2884cd34-ef5b-4036-92e1-4234089838e8)
     
 </details>
@@ -190,9 +192,9 @@ write_verilog -noattr multiple_modules_flat.v
 
 Results:
     
-    ![lab 5 flattened submodules](https://github.com/walaa-amer/VSD-HDP/assets/85279771/8df3b0f0-30f4-4ecf-85a4-1202eb74edd6)
+![lab 5 flattened submodules](https://github.com/walaa-amer/VSD-HDP/assets/85279771/8df3b0f0-30f4-4ecf-85a4-1202eb74edd6)
     
-Show results:
+Hierarchy:
 
 ```
 read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
