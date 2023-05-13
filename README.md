@@ -233,8 +233,8 @@ Hierarchy:
 <summary>FLOPS</summary>
 FLOPS are memory components used to eliminate glitching effect between combinational circuits.
 
-
-iverilog simulation commands for asynchronous reset:
+<details>
+<summary>iverilog simulation commands for asynchronous reset:</summary>
 
 ```
 iverilog dff_asyncres.v tb_dff_asyncres.v
@@ -252,7 +252,9 @@ A few remarquable points seen in this simulation:
 - In this instance in time, Q goes low once the asynchronous reset goes to high:
 ![lab 5 l3 flop iverilog simulation asyncres 2](https://github.com/walaa-amer/VSD-HDP/assets/85279771/e8a8db56-30e2-4de6-b1ef-fb89b1d5deeb)
 
-iverilog simulation commands for asynchronous set:
+</details>
+<details>
+<summary>iverilog simulation commands for asynchronous set:</summary>
 
 ```
 iverilog dff_async_set.v tb_dff_async_set.v
@@ -271,9 +273,10 @@ A few remarquable points seen in this simulation:
 
 - In this instance in time, Q goes high once the asynchronous set goes to high:
 ![lab 5 l3 flop iverilog simulation asyncset 2](https://github.com/walaa-amer/VSD-HDP/assets/85279771/5f061a26-6a43-4eba-86be-503c41fc608e)
-  
-    
-iverilog simulation commands for synchronous reset:
+</details>  
+<details>
+<summary>iverilog simulation commands for synchronous reset:</summary>    
+
 
 ```
 iverilog dff_syncres.v tb_dff_syncres.v
@@ -293,5 +296,5 @@ A few remarquable points seen in this simulation:
 ![lab 5 l3 flop iverilog simulation asyncset](https://github.com/walaa-amer/VSD-HDP/assets/85279771/33f4a417-f33b-4167-9fa9-62557402b130)
 
     
-    
+</details>    
 </details>
