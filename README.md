@@ -296,5 +296,66 @@ A few remarquable points seen in this simulation:
 ![lab 5 l3 flop iverilog simulation asyncset](https://github.com/walaa-amer/VSD-HDP/assets/85279771/33f4a417-f33b-4167-9fa9-62557402b130)
 
     
+</details>  
+<details>
+<summary>Synthesis of asynchronous reset:</summary>  
+
+Using the following commands:
+    
+    ```
+    read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+    read_verilog dff_asyncres.v
+    synth -top dff_asyncres
+    dfflibmap ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+    abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+    show
+    ```
+    
+Hierarchy:
+Inverter added for active high reset of the DFF
+    ![l4 dff show async res](https://github.com/walaa-amer/VSD-HDP/assets/85279771/a6f234aa-b1ad-411a-89bc-fd4f6878daa6)
+
 </details>    
+    
+<details>
+<summary>Synthesis of asynchronous set:</summary>  
+
+Using the following commands:
+    
+    ```
+    read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+    read_verilog dff_async_set.v
+    synth -top dff_async_set
+    dfflibmap ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+    abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+    show
+    ```
+    
+Hierarchy:
+Inverter added for active high reset of the DFF
+    ![l4 dff show async set](https://github.com/walaa-amer/VSD-HDP/assets/85279771/bc096373-9e72-49db-9525-576ee65d3c3b)
+
+
+</details>    
+    
+    <details>
+<summary>Synthesis of synchronous set:</summary>  
+
+Using the following commands:
+    
+    ```
+    read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+    read_verilog dff_sync_set.v
+    synth -top dff_sync_set
+    dfflibmap ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+    abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+    show
+    ```
+    
+Hierarchy:
+The AND gate with an inverter before the input replaces a 2-1 mux controller by sync reset
+   ![l4 dff show sync res](https://github.com/walaa-amer/VSD-HDP/assets/85279771/31548646-d811-404e-bd45-a7b4acd73c06)
+
+
+</details>  
 </details>
