@@ -360,7 +360,7 @@ The AND gate with an inverter before the input replaces a 2-1 mux controller by 
 </details>  
     
 <details>
-<summary>Optimization of multiplying by 2</summary> 
+<summary>Optimization of multiplication</summary> 
 
 Multiplication by 2 is basically the input appended by '0' at the end.
 
