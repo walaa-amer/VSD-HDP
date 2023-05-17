@@ -569,5 +569,60 @@ Hierarchy:
 ![d3 l6 dff_const5 show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/63658903-bcf1-40b6-814f-74e9d38f995a)
     
 </details> 
-</details>    
+</details>
+
+
+<details>
+<summary>Sequential Unused Output Optimization</summary> 
+<details>
+<summary>counter_opt</summary> 
+In the counter verilog code, the first 2 bits of the counter output are not used, as shown in the code below:
+    
+![d3 l6 counter_opt code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/6678a25a-e921-4260-8fae-57a61be2ee7e)
+    
+Synthesis:
+    
+```
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog counter_opt.v
+synth -top counter_opt
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+      
+Hierarchy:
+    
+![d3 l6 counter_opt show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/3612caee-fcf6-4790-93df-558dc161265b)
+
+    
+We see that the output of the synthesis uses only 1 DFF as an optimization since the first 2 bits of the counter are not being used.
+</details>
+    
+    
+<details>
+<summary>counter_opt2</summary> 
+We modify the counter verilog code to use all of the bits of count, as shown in the code below:
+    
+![d3 l6 counter_opt2 code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/8dc5c3e7-10cc-4a99-b18e-abc381e0cb2a)
+    
+Synthesis:
+    
+```
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog counter_opt2.v
+synth -top counter_opt
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+      
+Hierarchy:
+    
+![d3 l6 counter_opt2 show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/02c62eed-cabc-40d5-9a3c-36f2aab3ee6e)
+
+    
+We see that the output of the synthesis uses 3 DFFs since we need all of the output bits .
+    
+</details>
 </details>
