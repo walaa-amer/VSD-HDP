@@ -391,3 +391,183 @@ Which means that is a appended by 3 '0's is added with the 3-bit input itself, s
     
 </details>  
 </details>
+
+## Day 3
+<details>
+<summary>Combinational and sequential optimizations</summary> 
+Combinational: Simplify the logical expressions to use less gates
+Sequential: Sequential constants where signals hold a constant for any input change can help optimize a circuit.
+Advanced optimization methods: State optimization, Cloning, Retiming
+</details>
+
+<details>
+<summary>Combinational Logic Optimizations</summary>
+The opt_check.v code is a logic expression that represents a 2-1 mux. 
+    
+![d3 l6 opt_check code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/c8405f70-9433-472c-b8b0-90931994e145)
+
+This expression can be reduced to an AND gate since a.b + a'.0 = a.b. To achieve this optimization, we run the synthesis using the following commands:
+    ```
+    read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+    read_verilog opt_check.v
+    synth -top opt_check
+    opt_clean -purge //to remoce unused components of the design
+    abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+    show
+    ```
+Hierarchy:
+We can see that it reduced the design to an AND gate.
+    
+![d3 l6 opt_check show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/1e5854fb-a4e2-43e2-8331-62c01491404b)
+    
+The opt_check2.v code is also a logic expression that represents a 2-1 mux. 
+    
+![d3 l6 opt_check2 code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/4b2a81d2-7053-403f-a0c4-35a0ec17ae8a)
+    
+This expression can be reduced to an OR gate since a.1 + a'.b = a + a'.b = a + b. To achieve this optimization, we run the synthesis using the following commands:
+    ```
+    read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+    read_verilog opt_check2.v
+    synth -top opt_check2
+    opt_clean -purge //to remoce unused components of the design
+    abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+    show
+    ```
+Hierarchy:
+We can see that it reduced the design to an OR gate.
+    
+![d3 l6 opt_check2 show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/4c3d50eb-d74b-4fd9-9ee5-3ecb7fbc9eab)
+
+</details>
+
+<details>
+<summary>Sequential Logic Optimizations</summary>
+<details>
+<summary>dff_const1</summary> 
+In dff_const1.v, if RST goes from high to low, Q will ot take the value of D immediately, but will wait for the next clock rising edge -> the circuit cannot be reduced to an inverter of RST.
+    
+![d3 l6 dff_const1 code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/cf883c44-558d-4c95-afda-9ab864b671d3)
+
+
+We can see that in the following gtkwave snapshot:
+
+![d3 l6 dff_const1 gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/de3e6b01-5dd9-486c-8d92-4a2b774b7791)
+
+Synthesis:
+    
+ ```
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog dff_const1.v
+synth -top dff_const1
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+    
+Hierarchy:
+![d3 l6 dff_const1 show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/63494649-c767-4bd7-a287-c4f4cb888380)
+
+</details>
+<details>
+<summary>dff_const2</summary> 
+    
+However in dff_const2.v, Q will be high in any case, so it can be optimized. 
+    
+![d3 l6 dff_const2 code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/18913cf3-38f7-44a3-bd0e-4794d352bb73)
+    
+We can see that in the following gtkwave snapshot:
+
+![d3 l6 dff_const2 gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/e7cfa58a-72a3-4c58-bbd9-db93be710872)
+
+We need 0 FLOPs/cells.
+Synthesis:
+    
+ ```
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog dff_const2.v
+synth -top dff_const2
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+    
+Hierarchy:
+![d3 l6 dff_const2 show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/0f86fa3a-6a38-413a-9f71-fb7a908aaa70)
+</details>
+<details>
+<summary>dff_const3</summary> 
+In dff_const3.v, we have 2 consecutive FFs where when the first one changes the output value, the second one picks up the old value as its input at the rising clock edge (becuase of delay), and will pick up the new value one clock cycle after.
+
+![d3 l6 dff_const3 code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/46f524bc-f334-40ae-8ff8-08fd46d7af3d)
+
+
+And we can see that in the simulation result:
+![d3 l6 dff_const3 gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/6fe89243-d8aa-477b-8696-1cd4455219a2)
+
+Synthesis:
+    
+ ```
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog dff_const3.v
+synth -top dff_const3
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+    
+Hierarchy:
+![d3 l6 dff_const3 show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/d0753939-aebc-431b-b335-77f9e40fd6eb)
+</details>
+<details>
+<summary>dff_const4</summary> 
+In dff_const4.v, Q will be high whatever the input was, so is Q1.
+    
+![d3 l6 dff_const4 code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/0b9a6da2-8d27-4460-9c07-829b22ded9db)
+
+
+And we can see that in the simulation result:
+![d3 l6 dff_const4 gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/23d0b7c9-b59b-4443-82d2-d6eb085357ba)
+
+
+Synthesis:
+    
+ ```
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog dff_const4.v
+synth -top dff_const4
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+    
+Hierarchy:
+![d3 l6 dff_const4 show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/81a44e30-6ef6-4e3e-b39e-9de1da12fc2f)
+</details>
+<details>
+<summary>dff_const5</summary>     
+In dff_const5.v, we have 2 consecutive FFs where when the first one changes the output value, the second one picks up the old value as its input at the rising clock edge (becuase of delay), and will pick up the new value one clock cycle after.
+    
+![d3 l6 dff_const5 code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/09903b06-85c3-4c3b-afd5-cc8cc409ae6d)
+
+
+And we can see that in the simulation result:
+![d3 l6 dff_const5 gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/ad0b8f50-6859-4f8d-94ca-fed21c49b867)
+
+
+Synthesis:
+    
+ ```
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog dff_const5.v
+synth -top dff_const5
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+    
+Hierarchy:
+![d3 l6 dff_const5 show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/63658903-bcf1-40b6-814f-74e9d38f995a)
+    
+</details> 
+</details>    
+</details>
