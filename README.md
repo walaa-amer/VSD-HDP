@@ -626,3 +626,69 @@ We see that the output of the synthesis uses 3 DFFs since we need all of the out
     
 </details>
 </details>
+
+## Day 4
+
+<details>
+<summary>GLS</summary> 
+Running the netlix as the DUT with the same test bench as the one for RTL design using iverilog   . This helps us ensure that the timing of the design is met (alogside testing of the functionality) if the gate-level verilog model is timing-aware.
+</details>
+
+<details>
+<summary>Synthesis Simulation Mismatch</summary> 
+<details>
+<summary>Missing Sensitivity List</summary> 
+The simulator will look for activity (change in inputs) to evaluate the output. More specifically, it will look at a change in the sensitivity list. If inputs are not included in the sensitivity list, the simulator will not evaluate the output for changes in these variables. This will cause a mismatch between the design simulation in RTL and in the netlist. 
+In verilog the syntax always(*) is used to indicate evaluation at any change.
+    
+Testing on a ternary mux:
+![d4 l1 ternary_mux code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/cd58dba3-d8b9-46b1-9d51-dac3c24309f6)
+    
+Simulating this design would result in the follwing wave showing that y=i0 when sel=0 and y=i1 when sel=1:
+![d4 l1 ternary_mux gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/0eaac8e7-fc53-4d8c-96bb-3e2a12a766a6)
+  
+Hierarchy:
+![d4 l1 ternary_mux show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/d39b4355-6bdc-4516-ad42-bbf40ef4ce16)
+
+After the synthesis, we write the output to a netlist verilog file and simulate that file using iverilog with the following command:
+    
+```
+iverilog ../my_lib/verilog_models/primitives.v ../my_lib/sky130_fd_sc_hd.v ternary_operator_mux_net.v tb_ternary_operator_mux.v
+```
+    
+Visualizing the results using gtkwave:
+![d4 l1 ternary_mux_net gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/bc9ce6ab-ac09-4035-9b3b-18d34d411e91)
+
+Now looking at bad_mux.v, we se that sensitivity list only includes the select line, which means the simulator will only record changes in the output when sel is high and disregard any change in the inputs.
+![d4 l1 bad_mux code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/96cf450b-6554-4222-88b0-ddc3a1ef2a87)
+
+
+Visualizing on gtkwave shows that the design acts like flop more than a mux:
+
+![d4 l1 bad_mux gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/3e5e35f5-d34d-4bf4-8cff-8afd9b6ce449)
+
+However after synthesis and GSL simulation on the netlist, we notice that the behavior of the design is different, as the inputs are reflected on the output, anbd not just the select line, meaning that there is a mismatch is the simulations before and after synthesis because of missing sensitivity list:
+    
+![d4 l1 bad_mux_net gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/94a20691-4781-45c1-ac30-9ae58ea2be56)
+
+
+</details>
+    
+<details>
+<summary>Blocking Statements</summary> 
+Inside the always block, some statements are blocking (execute sequentially in order of writing) and some are non-blocking (execute oin parallel). Using blocking statements instead of non-blocking would sometimes cause issues in the design. Thus we must use non-blocking statements when dealing with sequential circuits.
+Example:
+For a 2 consecutive DFFs design:
+```
+q0=d;
+q=q0;
+```
+will lead to a 1 DFF design cause by the time q is evaluated, q0 already has the value of d.
+VS
+```
+q0<=d;
+q<=q0;
+```
+where the order of evaluation does not matter and the sequence in the circuit is conserved.
+
+</details>
