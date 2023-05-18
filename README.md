@@ -680,16 +680,20 @@ However after synthesis and GSL simulation on the netlist, we notice that the be
 Inside the always block, some statements are blocking (execute sequentially in order of writing) and some are non-blocking (execute oin parallel). Using blocking statements instead of non-blocking would sometimes cause issues in the design. Thus we must use non-blocking statements when dealing with sequential circuits.
 Example:
 For a 2 consecutive DFFs design:
+    
 ```
 q0=d;
 q=q0;
 ```
+    
 will lead to a 1 DFF design cause by the time q is evaluated, q0 already has the value of d.
 VS
+    
 ```
 q0<=d;
 q<=q0;
 ```
+    
 where the order of evaluation does not matter and the sequence in the circuit is conserved.
     
 Testing this on blocking_caveat.v:
