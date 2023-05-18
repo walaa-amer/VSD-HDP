@@ -542,6 +542,24 @@ show
     
 Hierarchy:
 ![d3 l6 dff_const4 show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/81a44e30-6ef6-4e3e-b39e-9de1da12fc2f)
+    
+Testing this on blocking_caveat.v:
+
+    
+In this code, we are using x in the first statement, and then updating it in the second statement. So we're using the past value of x as if there is a flop saving the value of x for the next clock cycle. 
+This behavior shows in the wave visualized by gtkwave:
+    
+![d4 l1 blocking_caveat gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/8f92e8a5-fbcc-4f24-ae41-39ad42cdecff)
+    
+After synthesis, we can see that there is no flop in the hierarchy:
+![d4 l1 blocking_caveat show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/eee2220f-6fb2-42f2-82f4-2c3dc50e6c9b)
+
+Visualizing the wave after synthesis shows a mismatch in the results with the RTL design:
+![d4 l1 blocking_caveat2 gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/e990763e-0fa0-439f-9762-4bdab5233a41)
+  
+In this wave, it is as if the statements were switched, and no flop is needed.
+
+    
 </details>
 <details>
 <summary>dff_const5</summary>     
