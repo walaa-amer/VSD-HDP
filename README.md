@@ -714,3 +714,45 @@ In this wave, it is as if the statements were switched, and no flop is needed.
 
 
 </details>
+</details>
+
+## Day 5
+
+<details>
+<summary>If case construct</summary> 
+<details>
+<summary>Incomplete if</summary>  
+In an if-else statement, priority is given to if conditions in the order they were written in. We should be careful not to keep the if-statement incomplete (without else statement) since the tool will then add an inferred latch to conserve the value of he output in case all the if consitions were not met and there is no else. Sometimes in combinational circuits, inferred latches are okay since latching the output is needed part of the design.
+Example counter:
+    ```
+    always @ (posedge clk, posedge reset)
+    begin
+        if (reset)
+            count <= 3'b000;
+        else if (en)
+            count <= count+1;
+     end
+     ```
+In this example, there is an incomplete if. However, when reset =0 and en=0, count should keep itsold value, which means a latch should be used to do that. Inferred latches provide this design, which in this case are convenient. 
+In the incomp_if.v example shows a mux design where only 1 case for the select shows:
+                
+![d5 l1 incompif code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/c778d9e5-6acd-40ca-95d2-2998eed9bc22)
+
+This incomplete if will infer a latch since the output will hold its value fori0=0, which is what we see in the simulation:
+                
+![d5 l1 incompif gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/f6f8f10a-e37c-4630-9012-7f7529357bf9)
+
+The synthesis shows a latch instead of a mux:
+![d5 l1 incompif show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/a30f0752-4445-4811-b5a5-dbd3c2603df7)
+</details>
+
+<details>
+<summary>Case caveat</summary> 
+Case statements can also be incomplete and create inferred latches. The solution to this is to code cae with default case. This default will act as an else and will avoid inferred latches.
+                
+Another problem for cases is partial assignment, is when you do not assign a value for some of the outputs, leading to create an inferred latch for those outputs.
+                
+Another problem is overlapping cases. When 2 cases match an input it might cause unpredictable output.
+                
+</details>
+</details>
