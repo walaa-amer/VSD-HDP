@@ -756,3 +756,109 @@ Another problem is overlapping cases. When 2 cases match an input it might cause
                 
 </details>
 </details>
+                
+<details>
+<summary>Looping constructs</summary>
+
+<details>
+<summary>For loop</summary>
+The for construct is used inside of the 'always' block. It is used for evaluating expressions multiple times. For example, if we need to write a 32:1 mux, we need to iterate over all 32 conditions to pass the correct output.
+
+Example:
+```
+integer i;
+always@(*)
+begin
+    for(i=0; i<32; i=i+1)
+        begin
+        if (i==sel)
+            y=inp[i];
+    end
+end
+```
+If we want to write the same code for 256:1 mux, we simply change the consition in the for loop only. This code writing style provides a concise and simple code that is easy to scale.
+
+Another example: 1:8 demux
+```
+integer i;
+always@(*)
+begin
+    op_bus[7:0] = 8'b0;
+    for (i=0; i<8; i=i+1)
+    begin
+    if (i==sel)
+        op_bus[i] = input;
+    end
+end
+```
+When the for loop runs, it evaluates the condition 8 times. At one point, the condition will match for 1 value and the output of that bit will be changed.
+
+Applying this concept to the mux_generate.v:
+
+![d5 l1 forloop mux code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/22607621-d358-4789-8d0b-a9c32aac6ba8)
+
+
+As shown in the code above, there are 4 inputs being lumped into 1 bus 'i_int'. The for loop is used inside the always block to evaluate the 'sel' value 4 times and pass the input to the output wherever the sel condition is satisfied.
+
+
+The simulatiom results show that the output follows the input depending on the select line value as it is supposed to do.
+![d5 l1 forloop mux gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/5a86646f-8245-44bd-8d50-8451ec79f52e)
+
+
+The simulation of the synthesized design also show the same results:
+//fix error in netlist
+
+Another example is the demux where we compare the code written without a for loop and with a for loop:
+
+![d5 l1 forloop demuxcase gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/87d57bad-ec8d-408c-8dd4-4e2c80332f7d)
+    
+![d5 l1 forloop demuxgen code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/c49cc642-d95e-41df-b9ed-2f770c76b0da)
+
+    
+First the output is initialized to 0. Using a case statement, we check the select line for all the values possible and pass the input to the output in only 1 case. If we want to scale to a 1:256, we're going to need 256 lines of code for the case statement, that we can replace with a few lines using the for loop. 
+
+
+The results of the 2 simulated designs deliver the same results of a demux shown below:
+
+![d5 l1 forloop demuxcase gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/be082913-e8d8-431e-b9b3-69f29ca20faf)
+
+![d5 l1 forloop demuxgen gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/9cad4f30-8098-4e22-a213-db8c6286d919)
+
+The simulation of the synthesized designs also show the same results:
+//fix error in netlist
+</details>
+
+<details>
+<summary>For generate</summary>
+The generate for loop is used outside of the 'always' block and cannot be used isnide of 'always'. It is used for instantiating hardware multiple times/ replication of hardware.
+Example: instantiate an AND gate 500 times.
+Instead of writing:
+```
+and u_and1(.a(); .b(); .y());
+and u_and2(.a(); .b(); .y());
+    ...
+and u_and500(.a(); .b(); .y());
+```
+We use for generate:
+genvar i;
+generate
+    for (i=0; i<8; i=i+1)
+       begin
+            and u_and(.a(in1[i]); .b(in2[i]); .y(y[i]));
+       end
+endgenerate
+```
+The AND gate is replicated 8 times, and each output of each gate is 1 bit of the final output.
+
+Replication of harwdare is clearly needed in design like the ripple-carry adders where we need the same piece of hardware several times to create that ripple effect.
+
+
+
+
+
+
+
+
+</details>
+</details>
+
