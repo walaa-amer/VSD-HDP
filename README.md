@@ -832,14 +832,19 @@ The simulation of the synthesized designs also show the same results:
 <summary>For generate</summary>
 The generate for loop is used outside of the 'always' block and cannot be used isnide of 'always'. It is used for instantiating hardware multiple times/ replication of hardware.
 Example: instantiate an AND gate 500 times.
+    
 Instead of writing:
+    
 ```
 and u_and1(.a(); .b(); .y());
 and u_and2(.a(); .b(); .y());
     ...
 and u_and500(.a(); .b(); .y());
 ```
+    
 We use for generate:
+    
+```
 genvar i;
 generate
     for (i=0; i<8; i=i+1)
