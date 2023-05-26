@@ -853,12 +853,14 @@ The AND gate is replicated 8 times, and each output of each gate is 1 bit of the
 Replication of harwdare is clearly needed in design like the ripple-carry adders where we need the same piece of hardware several times to create that ripple effect.
 
  Applying this to rca.v:
- 
+ ![d5 l1 forgen rca code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/afda53b2-fe9b-4209-80a9-675702c34d96)
+
  
 We can see that since the inputs are 8-bit long, the output will be 9 bits. Firet we instantiate the full adder 8 times and then the connections are made for the ripple effect.
 
 The variable used for the for generate is 'genvar' and not an integer. The simulation shows the expected result of the RCA:
 
+![d5 l1 rca gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/de91e092-dcb9-4de4-a4d6-850a1bf54d12)
 
 The simulation of the synthesized designs also show the same results:
 //fix error in netlist
