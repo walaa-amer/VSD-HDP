@@ -873,4 +873,13 @@ The simulation of the synthesized designs also show the same results:
 
 </details>
 </details>
+</details>
 
+## Day 7
+
+<details>
+<summary>STA Basics</summary>
+
+Min and MAx delay constraints are a glimpse of STA that we have seen before.
+
+</details>
