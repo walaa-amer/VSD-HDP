@@ -880,8 +880,6 @@ The simulation of the synthesized designs also show the same results:
 <details>
 <summary>Simulation/synthesis of my design</summary>
 
-</details>
-
 The design that I chose is a johnson counter, which is a type of ring counters. Please find the code in the johnson_counter.v file.
 Simulating this design results in the following:
 ![d6 johnson gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/66e56fd2-664f-4a8d-8508-4396604e8815)
@@ -903,13 +901,96 @@ GLS simulation of the synthesized design match the results of the pre-synthesis 
 
 ![d6 johnson sim gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/6048581f-7140-4651-b8cd-37ec67f665d1)
 
-
+</details>
 
 ## Day 7
+
+### Static Timing Analysis
 
 <details>
 <summary>STA Basics</summary>
 
 Min and Max delay constraints are a glimpse of STA that we have seen before.
+    
+Tclk > TCQ_A + TCOMBI + TSETUP_B: This equation lets us find the maximum delay the combinational circuit can handle.
+    
+THOLD_B < TCQ_A + TCOMBI: This equation lets us find the minimum delay needed to pass the correct data.
+               
+Min and max delay are correlated (2 sides of the same coin) since we need a max delay because the clock was pushed. We wouldn't need a min delay if the clock was not pushed.
+
+The water bucket analogy shows us that there is more delay to fill the bucket when there is less inflow, and less delay when there is more inflow. The inflow of weater translates to inflow of current. Fast current sourcing (or fast rise) means we're going to have less delay.
+The analogy also shows us that if we have the same inflow but 1 bucket larger than the other. In this case, delay is a function of bucket size to be filled, which translates to load capacitance.
+               
+![d7 water bucket analogy](https://github.com/walaa-amer/VSD-HDP/assets/85279771/9613b86b-5b5e-453f-add2-b77a281ffe91)
+               
+As a result, delay of a cell will be a result of both the input transition (inflow) and the output load.
+               
+               
+Example:
+![d7 example of delay](https://github.com/walaa-amer/VSD-HDP/assets/85279771/0fb9ecca-0496-4cd7-89f5-e7b45c5bc0b1)
+            
+
+The circuit above shows an OR gate followed by a XOR gate and preceeded by a buffer. The OR gate is connected to the XOR using a very lengthy net/wire, which will increase the load capacitance of this gate, and thus increase its delay. If the buffer rise time is also lengthy, it will also increase the delay of the OR gate.
+The output load can also increase due to a high fan-out of the gate.
+               
+For a combinational cell, delay information from each input to every output that it can control are present in the timing arcs.
+For a sequential circuit, the timing arcs will present the clk to A delay for DFF, the clk to Q delay and D o Q delay for D-latch, and the setup and hold times, as shown in the figure below.
+               
+![d7 timing arcs seq](https://github.com/walaa-amer/VSD-HDP/assets/85279771/eeddacf6-2304-4b5e-83a7-5782acda2a10)
 
 </details>
+    
+<details>
+<summary>Design Compiler Constraints</summary>
+
+    
+In the example below, we can see that there are 2 timing paths
+Path 1: TCK >= TCQ + TCOMBI + TSU => TCK >= 0.5+1.2+0.5 => TCK >= 2.2ns
+Path 2: TCK >= TCQ + TCOMBI + TSU => TCK >= 0.5+0.7+0.5 => TCK >= 1.7ns
+    
+=> Path 1 is the critical path since it is liomiting the clock frequency.
+fclk = 1000/2.2 = 454.5MHz.
+    
+The delay can be improved by reducing the delayof the critical path. For example, if we decrease the AND gate delay to 0.5 from 0.7, TCOMBI = 1ns => TCK > = 2ns => fclk <= 500MHz.
+
+![d7 timing paths example](https://github.com/walaa-amer/VSD-HDP/assets/85279771/d731dc78-c65a-410f-bca5-c9daebdc27df)
+
+To pass the timing constraints to the tool, we need to define constraints.
+
+Timing paths:
+- Start point: can be the input ports and clock pins of registers
+- End points: Output ports and D pin of DFF / DLAT
+Timing paths start at one of the start ponts and one of the end points:
+    - CLK to D : Reg 2 Reg timing path
+    - CLK to output : IO timing path
+    - Input to D : IO timing path
+    - Input to output : IO paths that should not be present
+
+
+    
+<details>
+<summary>Reg 2 Reg Constraints</summary>
+    
+The used clock will define how much delay is allowed in a circuit => Reg 2 Reg paths are constrained by the clock.
+
+In the example below, we want the circuit to run at 500MHz => TCLK = 2ns => TCOMBI <= 1ns. The clock period will limit the delays in all Reg 2 Reg paths. Passing the needed freqeuncy to the tool will let it know which component to coose from the library in order to meet the wanted frequency requirement.
+
+![d7 timing constraints example](https://github.com/walaa-amer/VSD-HDP/assets/85279771/b814d725-030c-49f9-827d-1b795bef8912)
+                                                                         IO Delay Modeling:                
+The input and the output are connected to external logic to the boundary. This means that there are more synchronous (running at the same clock) Reg 2 Reg paths hat need to be contrained.
+                                                                                         
+![d7 external paths](https://github.com/walaa-amer/VSD-HDP/assets/85279771/f277629e-654e-4361-b4fe-d89149bbfd1c)
+                                                                                         
+Assuming that fclk = 500MHz and for all flops: TCLK = 2ns, TCQ = 0.5ns, TSU = 0.5ns
+Looking at the input, REG_1 will take 0.5ns out of the 2ns for setup. This will leave the input logic and the outside world with 1.5ns. Assuming that we're giving 50% of this time to the outside logic. This means that the the input logic is left with 0.75ns. This is the input external delay. The tool will then squeeze the logic on the input to meet these requirements.
+Same for the output external delay.
+    
+We can egt these valuesby standard interface specifications orr by IO Budgeing based on interactions between different parts of the design.
+
+</details>
+    
+<details>
+<summary>IO Constraints</summary>
+</details>
+</details>
+    
