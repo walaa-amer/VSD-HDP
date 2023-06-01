@@ -875,11 +875,41 @@ The simulation of the synthesized designs also show the same results:
 </details>
 </details>
 
+## Day 6
+
+<details>
+<summary>Simulation/synthesis of my design</summary>
+
+</details>
+
+The design that I chose is a johnson counter, which is a type of ring counters. Please find the code in the johnson_counter.v file.
+Simulating this design results in the following:
+![d6 johnson gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/66e56fd2-664f-4a8d-8508-4396604e8815)
+
+Synthesizing using the following code:
+
+```
+read_liberty -lib 
+read_verilog johnson_counter.v
+synth -top johnson_counter
+abc -liberty 
+show
+```
+
+Running results in the following hierarchy:
+![d6 johnson show](https://github.com/walaa-amer/VSD-HDP/assets/85279771/4622c3f9-45fa-4ab0-b004-ff0f87441bb7)
+
+GLS simulation of the synthesized design match the results of the pre-synthesis simulation:
+
+![d6 johnson sim gtkwave](https://github.com/walaa-amer/VSD-HDP/assets/85279771/6048581f-7140-4651-b8cd-37ec67f665d1)
+
+
+
 ## Day 7
 
 <details>
 <summary>STA Basics</summary>
 
-Min and MAx delay constraints are a glimpse of STA that we have seen before.
+Min and Max delay constraints are a glimpse of STA that we have seen before.
 
 </details>
