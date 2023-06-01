@@ -976,8 +976,11 @@ The used clock will define how much delay is allowed in a circuit => Reg 2 Reg p
 In the example below, we want the circuit to run at 500MHz => TCLK = 2ns => TCOMBI <= 1ns. The clock period will limit the delays in all Reg 2 Reg paths. Passing the needed freqeuncy to the tool will let it know which component to coose from the library in order to meet the wanted frequency requirement.
 
 ![d7 timing constraints example](https://github.com/walaa-amer/VSD-HDP/assets/85279771/b814d725-030c-49f9-827d-1b795bef8912)
-                                                                         IO Delay Modeling:                
-The input and the output are connected to external logic to the boundary. This means that there are more synchronous (running at the same clock) Reg 2 Reg paths hat need to be contrained.
+</details>                                                               
+    
+<details>
+<summary>IO Constraints</summary>                
+The input and the output are connected to external logic to the boundary. This means that there are more synchronous (running at the same clock) Reg 2 Reg paths that need to be contrained.
                                                                                          
 ![d7 external paths](https://github.com/walaa-amer/VSD-HDP/assets/85279771/f277629e-654e-4361-b4fe-d89149bbfd1c)
                                                                                          
@@ -985,12 +988,14 @@ Assuming that fclk = 500MHz and for all flops: TCLK = 2ns, TCQ = 0.5ns, TSU = 0.
 Looking at the input, REG_1 will take 0.5ns out of the 2ns for setup. This will leave the input logic and the outside world with 1.5ns. Assuming that we're giving 50% of this time to the outside logic. This means that the the input logic is left with 0.75ns. This is the input external delay. The tool will then squeeze the logic on the input to meet these requirements.
 Same for the output external delay.
     
-We can egt these valuesby standard interface specifications orr by IO Budgeing based on interactions between different parts of the design.
+We can get these valuesby standard interface specifications orr by IO Budgeing based on interactions between different parts of the design.
 
-</details>
+However, the signals are not ideal, so due to non-zero rise time that has not been accounted for, the input delay will increase.    
+Another detail that should also be taken into consideration is the output load since it can also increase the ourput delay.
     
-<details>
-<summary>IO Constraints</summary>
+A rule of thumb usually used is the 70-30 rule, which means we give 70% of the clock period to the external delay and 30% to the internal delay.
+
+    
 </details>
 </details>
     
