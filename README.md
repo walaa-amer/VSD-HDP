@@ -1062,6 +1062,7 @@ get_lib_attribute <library_path>/<gate_name>/<output_pin> function
 ```
     
 To run several commands, we can add them in a .tcl file. In my_script.tcl:
+```
 set my_list [list <library_path>/<gate_name1> \
 <library_path>/<gate_name2> \
 <library_path>/<gate_name3> \
@@ -1079,6 +1080,7 @@ foreach my_cell $my_list{
         }
     }
 }
+```
 Then saving and sourcing the file back in the DC shell:
 ```
 source my_script.tcl
