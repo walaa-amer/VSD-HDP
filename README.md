@@ -915,6 +915,8 @@ Min and Max delay constraints are a glimpse of STA that we have seen before.
 Tclk > TCQ_A + TCOMBI + TSETUP_B: This equation lets us find the maximum delay the combinational circuit can handle.
     
 THOLD_B < TCQ_A + TCOMBI: This equation lets us find the minimum delay needed to pass the correct data.
+
+Setup time is always before the sampling point and holding is right after the point.
                
 Min and max delay are correlated (2 sides of the same coin) since we need a max delay because the clock was pushed. We wouldn't need a min delay if the clock was not pushed.
 
@@ -999,3 +1001,104 @@ A rule of thumb usually used is the 70-30 rule, which means we give 70% of the c
 </details>
 </details>
     
+<details>
+<summary>Timing .libs</summary>
+The library takes into consideration that the delay is a function of the output capacitance, which is equal to Cload = Cpin output + Cnet + sum(Cinputs) => it sets a maximum capacitance limit. If the capacitance value is large and we want to limit the input fanout capacitance, we can buffer the output, so the gate only sees the cap of the buffers now and those are driving the output o the next gate.
+With respect to clock, the data is non-unate since the value might or drop
+![d7 mac output cap](https://github.com/walaa-amer/VSD-HDP/assets/85279771/f2fa0d24-73df-4543-a61f-e26cbfabb1cf)
+    
+Delay Model Lookup Table:
+The delay is a function of the input transition and the load output capacitance. The llokup table gives a delay value for each input trans and output load capacitance. For every gate in the design, the tool will find the input transition time and the output capacitance, and will map these values to a range in the lookup table, and will use theses 4 values from the table to do an interpolation and find the corresponding delay value.
+![d7 delay model lookup table](https://github.com/walaa-amer/VSD-HDP/assets/85279771/05b1090e-116c-4d30-87be-d97e8a4fb6af)
+Information about the gates are also presented in the library file. It gives the area, leakage power and power alongside a description of each of the block's pins (e.g. if it needs a clock or not).
+    
+Unateness:
+This chacteristic is positive when the input rises and the output either does not change or also rises. This is seen in the AND and OR gates. In the case of NOT, NAND, and NOR when the input rises, the output falls or does not change, which is negative unateness.
+In the case of XOR, both positive and negative unateness are observed. Thus, it is non-unate since input rising can cause the output to rise or fall. This unateness information is present in the output pin documentation under "timing_sense" in the lib file and used to propagate the input transition.
+    
+More details about about the timing type (falling or rising edge) of flip flops is given in the file. For a latches, sampling will happen before the edges. If the latch is negative-edge, the sampling will happen at the rising edge and the setup will happen before it, and vice versa.
+</details>
+<details>
+<summary>DC Shell Commands</summary>   
+We can use the DC shell to find cells in the library using the following commands:
+    
+```
+dc_shell
+echo $target_library
+get_lib_cells */* -filter "is_sequential == true" #looking for all the sequential library cells
+```
+    
+To list the loaded libraries:
+```
+list_lib
+```
+    
+To find all the and gates in the library file:
+```
+get_lib cells */*and*
+```
+The output is a collection. To display the values of this collection seperately, we use the following command:
+```
+set my_lib_cell_name [get_object_name $my_lib_cell]; echo $my_lib_cell;
+```
+    
+To find the pins of a gate:
+```
+get_lib_pins <library_path>/<gate_name>/*
+```
+To get the output pin:
+```
+foreach_in_collection my_pins [get_lib_pins  <library_path>/<gate_name>/*] {
+set my_pin_name [get_object_name $my_pins];
+set pin_dir [get_lib_attribute <lib_cell or lib_pin> direction; #finds the      direction of the pins
+echo $my_pin_name $pin_dir;
+}
+```
+The output of this command is all the input pins with 1 next each one and all the output pins with 2 next to each one.
+    
+To find the function of a gate:
+```
+get_lib_attribute <library_path>/<gate_name>/<output_pin> function
+```
+    
+To run several commands, we can add them in a .tcl file. In my_script.tcl:
+set my_list [list <library_path>/<gate_name1> \
+<library_path>/<gate_name2> \
+<library_path>/<gate_name3> \
+<library_path>/<gate_name4> \
+<library_path>/<gate_name5>]
+    
+#for each cell in the list, find the output pin name and its functionality
+foreach my_cell $my_list{
+    foreach_in_collection my_lib_pin [get_lib_pins $(my_cell)/*]{
+        set my_lib_pin_name [get_object_name $my_lib_pin];
+        set a [get_lib_attribute $my_lib_pin_name direction;
+        if {$a > 1}{
+            set fn [get_lib_attribute $my_lib_pin_name function];
+            echo $my_lib_opin_name $a $fb;
+        }
+    }
+}
+Then saving and sourcing the file back in the DC shell:
+```
+source my_script.tcl
+```
+We get an output similar to the one below, for each cell displaying the functionality:
+![d7 output of dc shell source  tcl](https://github.com/walaa-amer/VSD-HDP/assets/85279771/afefdbf9-fb54-4087-b153-29773a88ce5a)
+
+To find the area of a cell:
+```
+get_lib_attribute <library_path>/<gate_name> area
+```  
+
+To find the pin capacitance of a cell:
+```
+get_lib_attribute <library_path>/<gate_name>/<pin> capacitance
+```    
+
+To check if a pin is a clock:
+```
+get_lib_attribute <library_path>/<gate_name>/<pin> clock
+```
+    
+</details>
