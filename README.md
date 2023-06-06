@@ -1104,3 +1104,9 @@ get_lib_attribute <library_path>/<gate_name>/<pin> clock
 ```
     
 </details>
+    
+## Day 8
+    
+<details>
+<summary>DC Shell Commands</summary> 
+</details>
