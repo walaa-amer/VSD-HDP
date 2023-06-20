@@ -1133,5 +1133,53 @@ Constraints:
 <summary>DC Shell Commands</summary>
 DC takes constraints inthe form of SDC (Synopsis Design Constraints).
     
-
+Getting ports:
+```
+get_ports clk;
+get_ports *clk* #returns a collection of ports having 'clk' in their names
+get_ports * #returns all ports
+get_ports * -filter "direction==in/out"
+```
+    
+Getting clocks:
+```
+get_clocks *
+get_clocks *clk*
+get_clocks * -filter "period > 10"
+get_attribute [get_clocks my_clk] period
+get_attribute [get_clocks my_clk] is_generated
+report_clocks my_clk
+```
+    
+Listing cells in a combo_logic hierarchical design where we instantiate a physical cell U1:
+```
+get_cells * -hier #lists all cells (physical and hierarchical)
+get_attribute [get_cells u_combo_logic] is_hierarchical #returns true
+get_attribute [get_cells u_combo_logic/U1] is_hierarchical #returns false
+```
+    
+To create a clock:
+```
+create_clock -name <clk_name> -per <period> [clock definition point] (optional)-wave{first rising and falling edges};
+set_clock_latency <delay> <clk_name>; #models network clock delay
+set_clock_uncertainty <skew+jitter> <clk_name>; #should be changed to only jitter post CTS
+```
+Clocks must be created on the clock generators (PLL, Oscillators) or primary IO pins (for external clocks). Clocks should not be created on hierarchical pims which are not clock generators.
+    
+To constraint the inputs:
+```
+set_input_delay -max <max delay> -clock [get_clocks <ref clk name>] [get_ports <name>*];
+set_input_delay -min <min delay> -clock [get_clocks <ref clk name>] [get_ports <name>*];
+set_input_transition -max <max delay> [get_ports <name>*];
+set_input_transition -min <min delay> [get_ports <name>*];
+```
+    
+To constraint the outputs:
+```
+set_output_delay -max <max delay> -clock [get_clocks <ref clk name>] [get_ports <name>*];
+set_output_delay -min <min delay> -clock [get_clocks <ref clk name>] [get_ports <name>*];
+set_output_load -max <max load> [get_ports <name>*];
+set_output_load -min <min load> [get_ports <name>*];
+```    
+    
 </details>
