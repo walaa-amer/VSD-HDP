@@ -1108,5 +1108,30 @@ get_lib_attribute <library_path>/<gate_name>/<pin> clock
 ## Day 8
     
 <details>
-<summary>DC Shell Commands</summary> 
+<summary>Uncertainty in clock tree modelling</summary>
+Dataflow: RTL->Synthesis->DFT->floor plan->Clock tree synthesis->place and route->final physical design database
+Logic is optimized in the synthesis step, where the clock is considered ideal. After CTS, flops might see the clock arriving at different times due to buffer delays, which creates clock skew.
+-> Tclk  Tskew > TCQ_A + TCOMBI + TSETUP_B
+Another problem is jitter which is caused by the stochastic variation of the clock generation which causes the signal to arrive in a time window instead of an exact instance, and thus can arrive in a different instance in this window every cycle.
+    
+So we need to model the clock for the following:
+- period
+- source latency: time taken by the source to generate the clock
+- clock network latency: time taken by the clock distribution network
+- clock skew:CTS will reduce this skew but it will not eliminate it
+- jitter :(period or duty cycle)
+
+Clock uncertainty is the jitter and the skew combined.
+Post CTS, the clock network is real so th2 modelled clock skew and network latency constraints should be eliminated and the tool should be able to compute these values. These constraints are useful to emulate the clock post CTS before going through the process, thus are not useful after that. Jitter constraints should be kept after the CTS.
+    
+Constraints:
+- clocks: R2R paths: period, latency, uncertainty
+- IO: IO2REG and REG2IO paths: input delay, input transition, output delay, output load
+</details>
+    
+<details>
+<summary>DC Shell Commands</summary>
+DC takes constraints inthe form of SDC (Synopsis Design Constraints).
+    
+
 </details>
