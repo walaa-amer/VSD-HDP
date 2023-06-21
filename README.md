@@ -1183,3 +1183,29 @@ set_output_load -min <min load> [get_ports <name>*];
 ```    
     
 </details>
+
+<details>
+<summary>Project design using design shells</summary>
+```
+csh
+dc_shell
+read_verilog lab8_circuit.v
+link
+compile_ultra
+foreach_in_collection my_ports [get_ports *]{
+    set my_port_name [get_object_name $my_port];
+    echo $my_port_name;
+}
+get_attribute [get_ports <name>] direction
+foreach_in_collection my_ports [get_ports *]{
+    set my_port_name [get_object_name $my_port];
+    set my_port_dir [get_attribute $my_ports_name direction];
+    echo $my_port_name $my_port_dir;
+} #print direction of all ports
+get_cells *
+get_attribute [get_cells <cell name>] is hierarchical
+get_cells * -hier -filter "is_hierarchical == true" #to get hierarchical cells
+get_attribute [get_cells <cell name> ref_name #to get the reference name of a cell
+write -f ddc -out lab8_circuit.v
+```
+</details>
