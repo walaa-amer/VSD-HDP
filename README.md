@@ -1240,7 +1240,7 @@ foreach_in_collection my_pin [get_pins *]{
 get_attribute [get_pins <pin_name>] clocks; #to find which clocks are driving this pin
 ```
 
-### Lab10:
+### Lab 10:
 
 ```
 current_design #to find the name of the top module we're currently working on
