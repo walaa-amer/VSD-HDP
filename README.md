@@ -1186,7 +1186,8 @@ set_output_load -min <min load> [get_ports <name>*];
 
 <details>
 <summary>Project design using design shells</summary>
-    
+
+Lab 8:
 ```
 csh
 dc_shell
@@ -1207,7 +1208,79 @@ get_cells *
 get_attribute [get_cells <cell name>] is hierarchical
 get_cells * -hier -filter "is_hierarchical == true" #to get hierarchical cells
 get_attribute [get_cells <cell name> ref_name #to get the reference name of a cell
+get_nets * #to get the nets in a design
+foreach_in_collection my_pin [all_connected n5]{
+    set pin_name [get_object_name $my_pin];
+    set dir [get_attribute $pin_name direction];
+    echo $pin_name $dir;
+} #to get the direction for each net and check their drivers
 write -f ddc -out lab8_circuit.v
 ```
+Note:
+In digital design, nets only have 1 driver, which means a net can only be connected to 1 source unless each source is connected to a switch that allows connecting the net to only 1 source at a time.
+
+Lab 9:
+
+```
+get_pins *
+foreach_in_collection my_pin [get_pins *]{
+    set pin_name [get_object_name $my_pin];
+    echo $pin_name;
+} #to print the names of all pins in the design
+foreach_in_collection my_pin [get_pins *]{
+    set pin_name [get_object_name $my_pin];
+    set pin_dir [get_attribute [get_pins $pin_name] direction];
+    if ([regex $pin_dir in]){
+        set pin_clk [get_attribute [get_pins $pin_name] clock -quiet];
+        if ($pin_clk){
+            echo $pin_name;
+        }
+    }
+} #to check if the input pins are clocks
+get_attribute [get_pins <pin_name>] clocks; #to find which clocks are driving this pin
+```
+
+Lab10:
+
+```
+current_design #to find the name of the top module we're currently working on
+create_clock -name MYCLK -per -10 [get_ports clk];
+get_attribute [get_clocks MYCLK] period
+get_attribute [get_clocks MYCLK] is_generate_clock #to check if the clock is a master clock
+get_attribute [get_ports out_clk] clocks;
+foreach_in_collection my_pin [get_pins *]{
+    set pin_name [get_object_name $my_pin];
+    set pin_dir [get_attribute [get_pins $pin_name] direction];
+    if ([regex $pin_dir in]){
+        set pin_clk [get_attribute [get_pins $pin_name] clock -quiet];
+        if ($pin_clk){
+            set clk [get_attribute [get_pins $my_pin_name] clocks];
+            set clk_name [get_object_name $clk];
+            echo $pin_name $clk_name;
+        }
+    }
+} #to check if the input pins are clocks and whcih clocks are reaching them
+report_clock * #return a detailed description of the clocks created in the design
+remove_clock <clock name> # to remove a created clock
+```
+Lab 11:
+
+Note:
+TCQ + TCOMBI + TSU <= Tclk - Tuncertainty
+TCQ + TCOMBI <= Tclk - TSU - Tuncertainty
+Arrival time <= Required time
+```
+set_clock_latency -source 1 [get_clocks MYCLK]; #set delay of the source
+set_clock_latency 1 [get_clocks MYCLK]; #set delay on the network
+set_clock_uncertainty 0.5 [get_clocks MYCLK]; #set setup time
+set_clock_uncertainty -hold 0.1 [get_clocks MYCLK]; #set delay time
+report_timing * #shows constraints for all paths
+```
+
+When the uncertainty constraint is added, the value is subtracted by the tool to find the max value to violate the constraint, and is added when finding the min value.
+![d8 uncertainty tool](https://github.com/walaa-amer/VSD-HDP/assets/85279771/b07e7a18-1e9b-47ef-b47e-25b8e8c7cd1d)
+
+
+
 
 </details>
