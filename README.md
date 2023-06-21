@@ -1186,6 +1186,7 @@ set_output_load -min <min load> [get_ports <name>*];
 
 <details>
 <summary>Project design using design shells</summary>
+    
 ```
 csh
 dc_shell
@@ -1208,4 +1209,5 @@ get_cells * -hier -filter "is_hierarchical == true" #to get hierarchical cells
 get_attribute [get_cells <cell name> ref_name #to get the reference name of a cell
 write -f ddc -out lab8_circuit.v
 ```
+
 </details>
