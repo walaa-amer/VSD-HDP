@@ -1187,7 +1187,7 @@ set_output_load -min <min load> [get_ports <name>*];
 <details>
 <summary>Project design using design shells</summary>
 
-Lab 8:
+### Lab 8:
 ```
 csh
 dc_shell
@@ -1219,7 +1219,7 @@ write -f ddc -out lab8_circuit.v
 Note:
 In digital design, nets only have 1 driver, which means a net can only be connected to 1 source unless each source is connected to a switch that allows connecting the net to only 1 source at a time.
 
-Lab 9:
+### Lab 9:
 
 ```
 get_pins *
@@ -1240,7 +1240,7 @@ foreach_in_collection my_pin [get_pins *]{
 get_attribute [get_pins <pin_name>] clocks; #to find which clocks are driving this pin
 ```
 
-Lab10:
+### Lab10:
 
 ```
 current_design #to find the name of the top module we're currently working on
@@ -1263,7 +1263,7 @@ foreach_in_collection my_pin [get_pins *]{
 report_clock * #return a detailed description of the clocks created in the design
 remove_clock <clock name> # to remove a created clock
 ```
-Lab 11:
+### Lab 11:
 
 Note:
 TCQ + TCOMBI + TSU <= Tclk - Tuncertainty
