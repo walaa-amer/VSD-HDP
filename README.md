@@ -1280,7 +1280,14 @@ report_timing * #shows constraints for all paths
 When the uncertainty constraint is added, the value is subtracted by the tool to find the max value to violate the constraint, and is added when finding the min value.
 ![d8 uncertainty tool](https://github.com/walaa-amer/VSD-HDP/assets/85279771/b07e7a18-1e9b-47ef-b47e-25b8e8c7cd1d)
 
+### Lab 12
 
+```
+set_input_delay -max 5 -clock [get_clocks MYCLK] [get_ports IN_A] #to model the max delay on the input
+set_input_delay -min 1 -clock [get_clocks MYCLK] [get_ports IN_A] #to model the max delay on the input
+report_timing -from <input port> -trans -net -cap #to show the timing report for the max path
+report_timing -from <input port> -trans -net -cap -nosplit -delay_type_min #to show the timing report for the min path
+```
 
 
 </details>
