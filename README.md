@@ -1327,9 +1327,11 @@ So:
 + +ve delay for max is tightening the path
 + -ve delay for min is tightening the path
 + +ve delay for min is relaxing the path
+ 
+
 Same applies for the output delay.
 
-### Ways to constrain dditional combinational path
+### Ways to constrain additional combinational path
 #### Set max latency to the path
 To constrain this additional combinational path in the circuit shown below, we use:
 
@@ -1342,7 +1344,7 @@ set_max_latency 1 -from [get_ports IN_D] -to [get_ports OUT_Z]
 
 #### Virtual clock
 
-Looking at the case where a flip flop passes its output to IN_C and another flip flop takes as inputOUT_Z, and these 2 flip flops (that are not part of the implemented module) follow a second clock CLK2. If we do not take into consideration the constraints on the combinational path, the system will suffer. The solution is to create a virtual clock using:
+Looking at the case where a flip flop passes its output to IN_C and another flip flop takes as input OUT_Z, and these 2 flip flops (that are not part of the implemented module) follow a second clock CLK2. If we do not take into consideration the constraints on the combinational path, the system will suffer. The solution is to create a virtual clock using:
 ```
 create_clock -name MY_VCLK -per <period_value> #without specifying a clock definition point and no latency
 ```
