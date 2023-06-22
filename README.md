@@ -1283,10 +1283,24 @@ When the uncertainty constraint is added, the value is subtracted by the tool to
 ### Lab 12
 
 ```
-set_input_delay -max 5 -clock [get_clocks MYCLK] [get_ports IN_A] #to model the max delay on the input
-set_input_delay -min 1 -clock [get_clocks MYCLK] [get_ports IN_A] #to model the max delay on the input
+set_input_delay -max 5 -clock [get_clocks MYCLK] [get_ports <input port>] #to model the max delay on the input
+set_input_delay -min 1 -clock [get_clocks MYCLK] [get_ports <input port>] #to model the max delay on the input
+
+set_input_transition -max 0.3 [get_ports <input port>]
+set_input_transition -min 0.1 [get_ports <input port>]
+
 report_timing -from <input port> -trans -net -cap #to show the timing report for the max path
 report_timing -from <input port> -trans -net -cap -nosplit -delay_type_min #to show the timing report for the min path
+
+set_output_delay -max 5 -clock [get_clocks MYCLK] [get_ports <output port>] #to model the max delay on the input
+set_output_delay -min 1 -clock [get_clocks MYCLK] [get_ports <output port>] #to model the max delay on the input
+
+set_load -max 0.4 [get_ports <output port>]
+set_load -min 0.1 [get_ports <output port>]
+
+report_timing -from <output port> -trans -net -cap #to show the timing report for the max path
+report_timing -from <output port> -trans -net -cap -nosplit -delay_type_min #to show the timing report for the min path
+
 ```
 
 
