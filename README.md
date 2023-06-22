@@ -1302,6 +1302,75 @@ report_timing -from <output port> -trans -net -cap #to show the timing report fo
 report_timing -from <output port> -trans -net -cap -nosplit -delay_type_min #to show the timing report for the min path
 
 ```
+</details>
 
+<details>
+<summary>Generated clocks</summary>
+The output clock connected to the input clock is logically the same but it not physically because it is delayed.
+```
+create_generated_clock -name MY_GEN_CLK -master [get_clocks MY_CLK] -source [get_ports CLK] -div 1 [get_ports OUT_CLK] #generate an output clock from the input clock (its frequency can be divided wrt to the input)
+get_attribute [get_clock MY_GEN_CLK] is_generated #return true
+set_output_delay -max 5 [get_ports <output port> -clock [get_clocks MY_GEN_CLK]
+set_output_delay -min 1 [get_ports <output port> -clock [get_clocks MY_GEN_CLK]
+report_timing -to <output port>
+```
+In case the design has 2 input clocks that drive 2 seperate parts of the design, we need to constraint the design in a different way. 
+</details>
 
+<details>
+<summary>Delay</summary>
+
+Negative input delay for max is relaxing the constraint since we are gaining more available time since the data is stable before the rise of the clock edge.
+Negative input delay for min should be avoided to avoid hold failure, since positive delay helps ensure the hold time, so we should delay the input.
+So:
++ -ve delay for max is relaxing the path
++ +ve delay for max is tightening the path
++ -ve delay for min is tightening the path
++ +ve delay for min is relaxing the path
+Same applies for the output delay.
+
+### Ways to constrain dditional combinational path
+#### Set max latency to the path
+To constrain this additional combinational path in the circuit shown below, we use:
+
+```
+set_max_latency 1 -from [get_ports IN_C] -to [get_ports OUT_Z]
+set_max_latency 1 -from [get_ports IN_D] -to [get_ports OUT_Z]
+```
+
+![d8 combo path constr](https://github.com/walaa-amer/VSD-HDP/assets/85279771/e80c5fc4-2154-4d1a-b5a4-94f3284357f9)
+
+#### Virtual clock
+
+Looking at the case where a flip flop passes its output to IN_C and another flip flop takes as inputOUT_Z, and these 2 flip flops (that are not part of the implemented module) follow a second clock CLK2. If we do not take into consideration the constraints on the combinational path, the system will suffer. The solution is to create a virtual clock using:
+```
+create_clock -name MY_VCLK -per <period_value> #without specifying a clock definition point and no latency
+```
+And then, we add constraints wrt to this virtual clock:
+```
+set_output_delay -max 2.5 -clock MY_VCLK [get_ports OUT_Z]
+set_input_delay -max 1.5 -clock MY_VCLK [get_ports IN_C]
+set_input_delay -max 1.5 -clock MY_VCLK [get_ports IN_D]
+```
+This is equaivalent to setting the max latency to 1ns.
+
+### IO Constraints revisited
+
+#### Effect of external input and output logic
+If the input is connected to external logic where the flip flop is negative edge, the flag -clock_fall should be added to the set input_delay line to specify that the data needs x ns to arrive after the falling edge of the clock and to be captured in the next rising edge of the clock. 
+If one input has to be constrained twice on the delay, the flag -add should be added.
+
+```
+set_input_delay -max 2 -clock CLK [get_ports IN_A]
+set_input_delay -max 3 -clock CLK __-clock_fall -add__ [get_ports IN_A]
+```
+Same applies to the output path.
+
+#### Driving cells
+
+When working with module impementations, the input load migh affect the input transition (larger load would lead to longer transition time). Thus, we model the transition using a driving cell instead of a constant, ehich makers it more flexible and adaptive to load variation, so it is more accurate and recommended for module level implementations. We replace the set_input_transition commands, which is more convenient for top module level IOs, with set_driving_cell command as follows:
+```
+set_driving_cell -lib_cell <lib_cell_name> <ports>
+set_driving_cell -lib_cell sky130_fd_sc_hd__buf_1 [all_inputs] #example
+```
 </details>
