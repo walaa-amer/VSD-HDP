@@ -1102,6 +1102,27 @@ To check if a pin is a clock:
 ```
 get_lib_attribute <library_path>/<gate_name>/<pin> clock
 ```
+
+Getting all inputs, outputs, clocks, and registers (run by a specific clock):
+```
+all_inputs
+all_outputs
+all_clocks
+all_registers
+all_regsiters -clock <clock_name>
+```
+
+To get the fanout from a port and print its endpoints:
+```
+all_fanout -from <port_name>
+all_fanout -flat -endpoints_only -from <port_name>
+```
+
+To get the fanin to a port and print its start points:
+```
+all_fanin -to <port_name>
+all_fanin -flat -startpoints_only -to <port_name>
+```
     
 </details>
     
@@ -1375,4 +1396,39 @@ When working with module impementations, the input load migh affect the input tr
 set_driving_cell -lib_cell <lib_cell_name> <ports>
 set_driving_cell -lib_cell sky130_fd_sc_hd__buf_1 [all_inputs] #example
 ```
+</details>
+
+<details>
+<summary>Additional combinational path case</summary>
+
+### Constraining using set_max_delay
+
+```
+csh
+dc_shell
+read_verilog lab14_circuit.v
+link
+compile_ultra
+report_timing -to OUT_Z #shows that the new added path is unconstrained
+report_timing -from IN_C #shows that the new added path is unconstrained
+set_max_delay 0.1 -from [all_inputs] -to [get_ports OUT_Z]
+report_timing -to OUT_Z
+```
+
+If the constraint is violated after this command, we can recompile for the tool to optimize the design to our contraints (choose different cells) and then rerun the timing report to check if the constraint is met.
+
+### Constraining using virtual clock
+
+A virtual clock is a clock used in the system but not in the modulke implemented, so it is created in our implementation without a definition point (no source).
+
+```
+create_clock -name MYVCLK -per 10
+set_input_delay -max 5 [get_ports IN_C] -clock [get_clocks MYVCLK]
+set_input_delay -max 5 [get_ports IN_D] -clock [get_clocks MYVCLK]
+set_output_delay -max 4.9 [get_ports IN_D] -clock [get_clocks MYVCLK]
+report_timing -to OUT_Z
+compile_ultra (if violated previously tm optimize for constraint added)
+report_timing -to OUT_Z
+```
+
 </details>
