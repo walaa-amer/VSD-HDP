@@ -1432,3 +1432,11 @@ report_timing -to OUT_Z
 ```
 
 </details>
+
+## Day 9
+
+Adding constraints to my Johnson counter design.
+I defined the constraints in a johnson_counter_const.sdc file:
+
+```
+
