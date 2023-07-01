@@ -1436,7 +1436,7 @@ report_timing -to OUT_Z
 ## Day 9
 
 <details>
-<summary>Constraints/summary>
+<summary>Constraints</summary>
     
 Adding constraints to my Johnson counter design.
 I defined the constraints in a johnson_counter_const.sdc file:
@@ -1462,3 +1462,5 @@ link_design johnson_counter
 read_sdc johnson_counter_const.sdc
 report_checks -fields {nets cap skew input_pins} -digits {4} > walaa_johnson.log
 ```
+
+</details>
