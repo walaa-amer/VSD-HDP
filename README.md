@@ -1435,8 +1435,30 @@ report_timing -to OUT_Z
 
 ## Day 9
 
+<details>
+<summary>Constraints/summary>
+    
 Adding constraints to my Johnson counter design.
 I defined the constraints in a johnson_counter_const.sdc file:
 
 ```
+create_clock -name MYCLK -per 10 [get_ports clk]
+set_clock_latency -source 1 [get_clocks MYCLK]
+set_clock_latency 1 [get_clocks MYCLK]
+set_clock_uncertainty 0.5 [get_clocks MYCLK]
+set_clock_uncertainty -hold 0.1 [get_clocks MYCLK]
+set_output_delay -max 5 -clock [get_clocks MYCLK] [get_ports count]
+set_output_delay -min 1 -clock [get_clocks MYCLK] [get_ports count]
+set_load -max 0.4 [get_ports count]
+set_load -min 0.1 [get_ports count]
+```
 
+And I created the johnson_counter_script.tcl file to apply and evaluate the constraints:
+
+```
+read_liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog johnson_counter_net.v
+link_design johnson_counter
+read_sdc johnson_counter_const.sdc
+report_checks -fields {nets cap skew input_pins} -digits {4} > walaa_johnson.log
+```
