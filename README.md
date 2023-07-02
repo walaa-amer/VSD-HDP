@@ -1520,6 +1520,10 @@ module tb_johnson_counter;
 	always #10 clk = ~clk;
 endmodule
 ```
+Pre-synthesis results:
+
+![Screenshot from 2023-07-01 17-11-24](https://github.com/walaa-amer/VSD-HDP/assets/85279771/f6ad0f39-5d7d-4ed6-b90e-1926fe31996f)
+
 
 To synthesize in yosys:
 
@@ -1535,6 +1539,8 @@ show
 
 The design hierarchy is as follows:
 
+![Screenshot from 2023-07-01 17-13-21](https://github.com/walaa-amer/VSD-HDP/assets/85279771/1346ef82-5b4b-4e0e-9bc7-582698bc1a25)
+
 
 
 The following is the netlist verilog code:
@@ -1545,14 +1551,20 @@ The following is the netlist verilog code:
 (* top =  1  *)
 (* src = "johnson_counter.v:1.1-17.10" *)
 module johnson_counter(clk, ori, count);
-  wire _00_;
+  (* src = "johnson_counter.v:6.2-14.5" *)
+  wire [2:0] _00_;
+  (* src = "johnson_counter.v:6.2-14.5" *)
   wire _01_;
   wire _02_;
-  (* src = "johnson_counter.v:3.8-3.11" *)
   wire _03_;
   wire _04_;
+  (* src = "johnson_counter.v:3.8-3.11" *)
   wire _05_;
+  (* src = "johnson_counter.v:5.11-5.15" *)
   wire _06_;
+  wire _07_;
+  wire _08_;
+  wire _09_;
   (* src = "johnson_counter.v:2.8-2.11" *)
   input clk;
   wire clk;
@@ -1564,48 +1576,57 @@ module johnson_counter(clk, ori, count);
   wire ori;
   (* src = "johnson_counter.v:5.11-5.15" *)
   wire [2:0] temp;
-  sky130_fd_sc_hd__clkinv_1 _07_ (
-    .A(_03_),
-    .Y(_00_)
-  );
-  sky130_fd_sc_hd__clkinv_1 _08_ (
-    .A(_03_),
+  sky130_fd_sc_hd__clkinv_1 _10_ (
+    .A(_06_),
     .Y(_01_)
   );
-  sky130_fd_sc_hd__clkinv_1 _09_ (
-    .A(_03_),
+  sky130_fd_sc_hd__clkinv_1 _11_ (
+    .A(_05_),
     .Y(_02_)
   );
+  sky130_fd_sc_hd__clkinv_1 _12_ (
+    .A(_05_),
+    .Y(_03_)
+  );
+  sky130_fd_sc_hd__clkinv_1 _13_ (
+    .A(_05_),
+    .Y(_04_)
+  );
   (* src = "johnson_counter.v:6.2-14.5" *)
-  sky130_fd_sc_hd__dfrtp_1 _10_ (
+  sky130_fd_sc_hd__dfrtp_1 _14_ (
     .CLK(clk),
     .D(temp[1]),
     .Q(temp[0]),
-    .RESET_B(_04_)
+    .RESET_B(_07_)
   );
   (* src = "johnson_counter.v:6.2-14.5" *)
-  sky130_fd_sc_hd__dfrtp_1 _11_ (
+  sky130_fd_sc_hd__dfrtp_1 _15_ (
     .CLK(clk),
     .D(temp[2]),
     .Q(temp[1]),
-    .RESET_B(_05_)
+    .RESET_B(_08_)
   );
   (* src = "johnson_counter.v:6.2-14.5" *)
-  sky130_fd_sc_hd__dfstp_2 _12_ (
+  sky130_fd_sc_hd__dfstp_2 _16_ (
     .CLK(clk),
-    .D(temp[0]),
+    .D(_00_[2]),
     .Q(temp[2]),
-    .SET_B(_06_)
+    .SET_B(_09_)
   );
+  assign _00_[1:0] = temp[2:1];
   assign count = temp;
-  assign _03_ = ori;
-  assign _04_ = _00_;
-  assign _05_ = _01_;
-  assign _06_ = _02_;
+  assign _06_ = temp[0];
+  assign _00_[2] = _01_;
+  assign _05_ = ori;
+  assign _07_ = _02_;
+  assign _08_ = _03_;
+  assign _09_ = _04_;
 endmodule
 ```
 
 The post-synthesis simulation:
+
+![Screenshot from 2023-07-01 17-18-35](https://github.com/walaa-amer/VSD-HDP/assets/85279771/7757927d-cc33-4949-9657-9dfaabc415ed)
 
 
 </details>
@@ -1613,13 +1634,14 @@ The post-synthesis simulation:
 <details>
 <summary>Timing report</summary>
 
-Running OpenSTA:
+Running on for max path OpenSTA:
 
 ![Screenshot from 2023-07-01 15-51-00](https://github.com/walaa-amer/VSD-HDP/assets/85279771/d4baf2e6-8ec6-45f9-905c-9b12d2b20547)
 
 Results in walaa_johnson.log:
 
-![Screenshot from 2023-07-01 15-52-24](https://github.com/walaa-amer/VSD-HDP/assets/85279771/1aeb36f8-81d8-4a02-bd46-f27b3b573373)
+![Screenshot from 2023-07-01 17-19-46](https://github.com/walaa-amer/VSD-HDP/assets/85279771/0fccff71-046a-4b75-bbf3-403e95ac8944)
+
 
 
 </details>
