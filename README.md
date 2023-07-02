@@ -1328,6 +1328,7 @@ report_timing -from <output port> -trans -net -cap -nosplit -delay_type_min #to 
 <details>
 <summary>Generated clocks</summary>
 The output clock connected to the input clock is logically the same but it not physically because it is delayed.
+	
 ```
 create_generated_clock -name MY_GEN_CLK -master [get_clocks MY_CLK] -source [get_ports CLK] -div 1 [get_ports OUT_CLK] #generate an output clock from the input clock (its frequency can be divided wrt to the input)
 get_attribute [get_clock MY_GEN_CLK] is_generated #return true
@@ -1335,6 +1336,7 @@ set_output_delay -max 5 [get_ports <output port> -clock [get_clocks MY_GEN_CLK]
 set_output_delay -min 1 [get_ports <output port> -clock [get_clocks MY_GEN_CLK]
 report_timing -to <output port>
 ```
+
 In case the design has 2 input clocks that drive 2 seperate parts of the design, we need to constraint the design in a different way. 
 </details>
 
@@ -1649,5 +1651,33 @@ Min delay path:
 
 ![Screenshot from 2023-07-01 17-26-52](https://github.com/walaa-amer/VSD-HDP/assets/85279771/dc154a24-3d43-4c39-b597-6e594434bd1d)
 
+</details>
+
+
+## Day 10
+
+<details>
+<summary>Intro to circuit design</summary>
+
+A delay table will help us find the delay for each gate based on the intersection between the input skew and the output load of that specific gate.
+Spice will provide these tables based on detail characterization of the CMOS gates.
+
+</details>
+
+
+<details>
+<summary>NMOS structure</summary>
+
+An NMOS is a 4-terminal device consisting of a p-substrate (body B) and 2 n diffusion regions (source S and drain D), the gate oxide area, and the polysilicon or metal gate (G) and 2 isolation regios to separate transistors from each other.
+A PMOS is an inverted version of the NMOS structure.
+
+- Threshold voltage:
+  Considering Vg = Vs = Vd = Vb = 0. The substrate-source and the substrate-drain form a p-n junction that are off since no voltage => high resistance. If a small positive voltage is applied to the gate, a positive charge is passed to the gate which will try to repel all positive charges in the p-substrate, leaving negatively charged holes forming a depletion region. Increasing the voltage at the gate, the depletion region gets larger, creating an n-type surface in the p-substrate when the voltage hits a threshold voltage (Vt). The positive charge at the gate will now also attract the negative charge from the n diffusion regions passing from the source through the n-type channel to the drain.
+
+  The threshold voltage depends on the voltage Vsb. As Vsb is increased, the depletion region right below the source increased in area. Some charges from the channel also start to be pulled towards the source, slowing down the process of surface inversion to n-type. At Vsb = 0, the threshold voltage is Vt0 and Vgs = Vt0. At a positive Vsb, Vgs = Vt0 + V1. This is the body effect.
+  The threshold equation is:
+  Vt = Vt0 + sigma.(sqrt(abs(-2phi(f) + Vsb)) - sqrt(abs(-2phi(f)))) / sigma is the body coefficient and phi(f) is the Fermi Potential
+
+  This equation will characterize every transistor model.
 
 </details>
