@@ -1636,19 +1636,18 @@ The post-synthesis simulation:
 
 Running on OpenSTA:
 
-Max delay path:
-
 ![Screenshot from 2023-07-01 15-51-00](https://github.com/walaa-amer/VSD-HDP/assets/85279771/d4baf2e6-8ec6-45f9-905c-9b12d2b20547)
-
-Min delay path:
-
-![Screenshot from 2023-07-01 17-26-52](https://github.com/walaa-amer/VSD-HDP/assets/85279771/dc154a24-3d43-4c39-b597-6e594434bd1d)
 
 
 Results in walaa_johnson.log:
 
+Max delay path:
+
 ![Screenshot from 2023-07-01 17-19-46](https://github.com/walaa-amer/VSD-HDP/assets/85279771/0fccff71-046a-4b75-bbf3-403e95ac8944)
 
+Min delay path:
+
+![Screenshot from 2023-07-01 17-26-52](https://github.com/walaa-amer/VSD-HDP/assets/85279771/dc154a24-3d43-4c39-b597-6e594434bd1d)
 
 
 </details>
