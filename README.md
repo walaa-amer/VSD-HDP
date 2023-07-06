@@ -1672,7 +1672,7 @@ An NMOS is a 4-terminal device consisting of a p-substrate (body B) and 2 n diff
 A PMOS is an inverted version of the NMOS structure.
 
 - Threshold voltage:
-  Considering Vg = Vs = Vd = Vb = 0. The substrate-source and the substrate-drain form a p-n junction that are off since no voltage => high resistance. If a small positive voltage is applied to the gate, a positive charge is passed to the gate which will try to repel all positive charges in the p-substrate, leaving negatively charged holes forming a depletion region. Increasing the voltage at the gate, the depletion region gets larger, creating an n-type surface in the p-substrate when the voltage hits a threshold voltage (Vt). The positive charge at the gate will now also attract the negative charge from the n diffusion regions passing from the source through the n-type channel to the drain.
+  Considering Vg = Vs = Vd = Vb = 0. The substrate-source and the substrate-drain form a p-n junction that are off since no voltage => high resistance. If a small positive voltage is applied to the gate, a positive charge is passed to the gate which will try to repel all positive charges in the p-substrate, leaving negatively charged holes forming a depletion region. Increasing the voltage at the gate, the depletion region gets larger, creating an n-type surface in the p-substrate when the voltage hits a threshold voltage (Vt). The positive charge at the gate will now also attract the negative charge from the n diffusion regions passing from the source through the n-type channel to the drain. Vt is the Vgs voltage value at whoch a strong inversion happens.
 
   The threshold voltage depends on the voltage Vsb. As Vsb is increased, the depletion region right below the source increased in area. Some charges from the channel also start to be pulled towards the source, slowing down the process of surface inversion to n-type. At Vsb = 0, the threshold voltage is Vt0 and Vgs = Vt0. At a positive Vsb, Vgs = Vt0 + V1. This is the body effect.
   The threshold equation is:
@@ -1680,4 +1680,9 @@ A PMOS is an inverted version of the NMOS structure.
 
   This equation will characterize every transistor model.
 
+For Vgs > Vt, a charge equivalent to the voltage value Vgs - Vt is induced in the channel. 
+Applying a voltage Vd at the drain will lead to a potential difference between the drain and the source. At a point x in the channel, Vgate-to-channel(x) = Vgs- V(x).
+The charge at point x is then Q(x) = -Cox (Vgs - V(x) - Vt) with Cox = eox / tox. 
+
+From the device's point of view, there are 2 currents: drift current iduced by the difference in potential and the diffusion current induced by the difference in carrier concentration. The drift curfrent is equal to the velocity of the charge carriers X available charge / width.
 </details>
