@@ -1762,8 +1762,11 @@ To include the model file:
 .LIB "Models.mod" CMOS_MODELS
 ```
 
-Commands added to run spice smulations, such as a swwep over a voltage source.
+Commands added to run spice smulations, such as a sweep over a voltage source using:
 
+```
+.dc VOLTAGE_SOURCE_NAME START_VAL END_VAL INCREMENT_VAL (needs continuation)
+```
 
 
 </details>
@@ -1786,3 +1789,53 @@ Following are the result of the simulation that I ran:
 </details>
 
 ## Day 11
+
+<details>
+<summary>Short and Long channel devices</summary>
+
+In the image attached in the last simulation, we can see that there are 2 seperate regions where in one of them the MOSFET woiuld be working linearly and in the other one the drain current would saturate and would not change signifcantly with the change in Vds. We also notice that the drain current increase quadratically with the gate voltage.
+
+If we reduce the length and the width to result in a short-length device but in a way to conserve the ratio W/L, the drain current's relationship with the gate voltage becomes linear. This is due to the effect of velocity saturation in short-length channels. After a threshold electric field (Ec), the velocity of electrons will saturate at Vsat, stopping the ID to reach the usual saturation region. In that case, a new mode of operation exists: Velocity saturation. To take that int consideration, we will need to remodel the current drain to become:
+
+ID = kn. [(Vgs-vt).Vmin - (Vmin^2)/2].[1+lambda.Vds] where Vmin = min(Vgs-Vt, Vds, Vdsat)
+
+</details>
+
+<details>
+<summary>Short channel simulations</summary>
+
+To simulate on ngspice, we sweep both vds and vgs:
+
+```
+ngspice day2_nfet_idvds_L015_W019.spice
+```
+
+and then we enter the command "plot -vdd#branch" to plot ID vs Vds. The following results show a linear relationship between ID and Vgs:
+![d11 short channel characteristic](https://github.com/walaa-amer/VSD-HDP/assets/85279771/06f16cdd-bf98-429c-9fc5-a4df0b68cdad)
+
+
+A step further is to sweep only Vgs while keeping Vds constant using the following command
+
+```
+ngspice day2_nfet_idvgs_L015_W019.spice
+```
+
+Plotting shows a clear linear relationship between ID and Vgs:
+![d11 id vs vgs](https://github.com/walaa-amer/VSD-HDP/assets/85279771/deb58660-dcfb-4156-94df-a6187ecf6741)
+
+To find the threshold voltage from this plot, we draw the tangent to the linear part of the curve and find the intersection of it wrt to he X-axis, as shown below:
+
+![d11 find vt](https://github.com/walaa-amer/VSD-HDP/assets/85279771/624c13ac-3bd1-4ac2-a610-b5140cb55b13)
+
+
+</details>
+
+<details>
+<summary>CMOS Voltage-Transfer Characteristics (VTC)</summary>
+
+In an CMOS inverter, Vin is connected to the gates of both the NMOS and the PMOS. If Vin is high, Vgs(n) > Vt(n) which means the NMOS is ON, and Vgs(p) < Vt(p), so the transistor PMOS is OFF. We see this described in the following diagram:
+![d11 cmos inverter 1](https://github.com/walaa-amer/VSD-HDP/assets/85279771/df992874-fa85-4af5-8ed5-3e00e4d2610d)
+
+
+
+</details>
