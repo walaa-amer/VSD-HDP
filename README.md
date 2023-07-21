@@ -1728,7 +1728,7 @@ The model file would look as follows:
 
 The model name is the name used in the netlist. This file is then packaged into a .mod file.
 
-
+</details>
 <details>
 <summary>SPICE Netlist</summary>
 Given the following circuit, we would like to build the netlist:
@@ -1755,7 +1755,6 @@ A voltage source is described as follows:
 ```
 SOURCE_NAME_STARTING_WITH_V POS_NODE NEG_NODE value
 ```
-</details>
 
 To include the model file:
 
