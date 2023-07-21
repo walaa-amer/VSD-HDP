@@ -1684,5 +1684,106 @@ For Vgs > Vt, a charge equivalent to the voltage value Vgs - Vt is induced in th
 Applying a voltage Vd at the drain will lead to a potential difference between the drain and the source. At a point x in the channel, Vgate-to-channel(x) = Vgs- V(x).
 The charge at point x is then Q(x) = -Cox (Vgs - V(x) - Vt) with Cox = eox / tox. 
 
-From the device's point of view, there are 2 currents: drift current iduced by the difference in potential and the diffusion current induced by the difference in carrier concentration. The drift curfrent is equal to the velocity of the charge carriers X available charge / width.
+From the device's point of view, there are 2 currents: drift current iduced by the difference in potential and the diffusion current induced by the difference in carrier concentration. The drift current is equal to the velocity of the charge carriers X available charge / channel width.
+
+Model for ID for the spice simulation:
+
+ID = -Vn(x) . Q(x) . W
+From deriving this equation:
+ID = un.Cox.(W/L).[(Vgs-Vt).Vds - Vds^2/2]
+ID = kn.[(Vgs-Vt).Vds - Vds^2/2] with kn = un.Cox.(W/L)
+
+If Vds<=(Vgs - Vt), Vds <<< so we can neglect the squared value in the equation and the MOSFET would be operating in the linear/resistive region:
+ID = kn.(Vgs-Vt).Vds
+
+If Vds>(Vgs-Vt), the channel starts thinning from the drain side of the MOSFET at pinch-off and disappearing as we increase Vds even more.
+Pinch-offf condition: Vgs-Vds <= Vt
+At saturation: ID = (kn/2) . (Vgs-Vt)^2 = (kn'/2) . (W/L) . (Vgs-Vt)^2
+Taking into consideration channel length modulation: ID = (kn'/2) . (W/L) . (Vgs-Vt)^2.[1+lambda.Vds]
+
 </details>
+
+<details>
+<summary>Intro to SPICE: Spice Setup</summary>
+
+We have models for the threshold voltage and the drain current for the linear region and the saturation region.
+
+In these equation, we have constants specific for each technology node that we provide through the model file.
+
+The spice software will take the model parameters and the netlist to generate the (ID-Vds) characteristic.
+
+
+<details>
+<summary>Technology file</summary>
+
+We need the models for the MOSFETs. The model files will provide the constants needed to compute the threshold voltage and the drain current.
+
+The model file would look as follows:
+
+```
+.MODEL nmos(model name) NMOS(foundation name) (TOX = .. VTH0 = .. U0 = .. GAMMA1 = ..)
+.MODEL pmos(model name) PMOS(foundation name) (TOX = .. VTH0 = .. U0 = .. GAMMA1 = ..)
+.endl
+```
+
+The model name is the name used in the netlist. This file is then packaged into a .mod file.
+
+
+<details>
+<summary>SPICE Netlist</summary>
+Given the following circuit, we would like to build the netlist:
+	
+![d10-circuit](https://github.com/walaa-amer/VSD-HDP/assets/85279771/38c52231-b041-4318-9c78-5a698671664c)
+
+
+Wires are collapsed to nodes joining several components. Nodes are given names to represent them. 
+
+A MOSFET is described using the following line:
+
+```
+MOSFET_NAME DRAIN_NODE_NAME GATE_NODE_NAME SOURCE_NODE_NAME BODY_NODE_NAME  MOSFET_NAME_IN_TECH_FILE W=width L=length
+```
+
+A resistor is described as follows:
+
+```
+RESISTOR_NAME INPUT_NODE OUTPUT_NODE value
+```
+
+A voltage source is described as follows:
+
+```
+SOURCE_NAME_STARTING_WITH_V POS_NODE NEG_NODE value
+```
+</details>
+
+To include the model file:
+
+```
+.LIB "Models.mod" CMOS_MODELS
+```
+
+Commands added to run spice smulations, such as a swwep over a voltage source.
+
+
+
+</details>
+
+<details>
+<summary>First SPICE simulation</summary>
+
+to run ngpice, we run the following command:
+
+```
+ngspice <name (day1_nfet_idvds_L2_W5.spice)>
+```
+
+In the ngspice command prompt, we add "plot". For any point, we can click on the plot and the coordinates of it will show on the terminal.
+
+Following are the result of the simulation that I ran:
+
+![d10 firstspicesim](https://github.com/walaa-amer/VSD-HDP/assets/85279771/01a47866-1728-46c6-83e9-ca83677cdfb4)
+
+</details>
+
+## Day 11
