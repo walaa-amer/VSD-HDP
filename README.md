@@ -1787,6 +1787,7 @@ Following are the result of the simulation that I ran:
 ![d10 firstspicesim](https://github.com/walaa-amer/VSD-HDP/assets/85279771/01a47866-1728-46c6-83e9-ca83677cdfb4)
 
 </details>
+</details>
 
 ## Day 11
 
