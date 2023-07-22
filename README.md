@@ -1834,9 +1834,108 @@ To find the threshold voltage from this plot, we draw the tangent to the linear 
 <details>
 <summary>CMOS Voltage-Transfer Characteristics (VTC)</summary>
 
-In an CMOS inverter, Vin is connected to the gates of both the NMOS and the PMOS. If Vin is high, Vgs(n) > Vt(n) which means the NMOS is ON, and Vgs(p) < Vt(p), so the transistor PMOS is OFF. We see this described in the following diagram:
-![d11 cmos inverter 1](https://github.com/walaa-amer/VSD-HDP/assets/85279771/df992874-fa85-4af5-8ed5-3e00e4d2610d)
+In an CMOS inverter, Vin is connected to the gates of both the NMOS and the PMOS. 
+If Vin is high, Vgs(n) > Vt(n) which means the NMOS is ON and is represented by a resistor, and Vgs(p) > Vt(p), so the transistor PMOS is OFF. 
+
+If Vin is low, Vgs(p) < Vt(p) so the PMOS is ON and is represented by a resistor, and Vgs(n) < Vt(n) so NMOS is OFF.
+
+This is described in the following diagram along with the naming scheme for the differet components and nodes in the circuit:
+
+![d11 cmos inverter 1](https://github.com/walaa-amer/VSD-HDP/assets/85279771/398b5d4f-6377-483c-8c19-e74b6fc2d866)
+
+We have:
+VgsN = Vin
+VdsN = Vout
+VgsP = Vin - Vdd
+VdsP = Vout - Vdd
+
+IsdP = -IdsN
+![d11 inverter characteristic 1](https://github.com/walaa-amer/VSD-HDP/assets/85279771/56ff34dc-0c7f-491a-bf16-3be3dd1ee3d9)
+
+To obtain the  inverter's characteristic, we get the I_V curve for the NMOS and the PMOS, then we modify the PMOS curve to represent it in terms of IdsN and VdsN (Vout), which means first invert it wrt to the x-axis and then shift it to the right by Vdd, as this is the graphical representation of applying the equations above:
+
+![d11 inverter characteristic 2](https://github.com/walaa-amer/VSD-HDP/assets/85279771/c5434579-af2d-4789-a536-26d69a8b34a3)
+
+Merging the 2 curves helps us find the voltage transfer characteristic which tells us the value of Vout for each point of Vin:
+
+![d11 inverter characteristic 3](https://github.com/walaa-amer/VSD-HDP/assets/85279771/8dfb10b8-cba4-47d0-b8d4-c2172597a0d0)
 
 
+It is worth noting that the linear region in the Vin-Vout curve is a high gain range, so a small change in the input leads to a high change in the output.
+
+
+</details>
+
+## Day 12
+
+<details>
+<summary>CMOS VTC SPICE Simulation</summary>
+
+We first need to identify the connectivity of the components in the circuit and the component values (W, L, CL, Vin, Vout...).
+We then have to identify the nodes in the circuit and give them names.
+
+![d11 circuit of inverter](https://github.com/walaa-amer/VSD-HDP/assets/85279771/39a14a39-c2ee-4414-93d0-97df90f6efe8)
+
+
+For the case of this circuit, the netlist would be:
+
+```
+M1 out in vdd vdd pmos W=0.375u L=0.25u
+M2 out in 0 0 nmos W=0.375u L=0.25u
+cload out 0 10f
+Vdd vdd 0 2.5
+Vin in 0 2.5
+
+.op
+.dc Vin 0 2.5 0.05
+
+.LIB "tsmc_025um_model.mod CMOS_MODELS
+.end
+```
+In this case we have Wn = Wp and Ln = Lp. The simulation will result in this VTC waveform:
+
+![d12 vtc of inveter](https://github.com/walaa-amer/VSD-HDP/assets/85279771/13088fc4-43d6-4151-94b8-66fd483efdcf)
+
+Increasing Wp = 2.5Wn and simulating would result in:
+
+
+
+</details>
+
+<details>
+<summary>VTC and Transiant analysis simulations</summary>
+
+Simulating the case where Wp = 2.33Wn.
+Running on ngspice:
+```
+ngspice day3_inv_vtc_Wp084_Wn036.spice
+```
+
+Then use the command
+```
+plot out vs in
+```
+
+The result is this curve thatlets us find the threshold voltage which is equivalent in this case to around 0.8:
+![d12 outvsin plot](https://github.com/walaa-amer/VSD-HDP/assets/85279771/7ef140cb-2cc4-4842-980d-02a756d88a43)
+
+Then running the transient analysis:
+
+```
+ngspice day3_inv_tran_Wp084_Wn036.spice
+```
+This spice netlist looks as follows:
+
+![d12 tran analysis code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/fe2322c2-59ae-452d-9b7e-95be537f8f3f)
+
+Running and plotting using
+```
+plot out time in
+```
+results in:
+
+![d12 tran analysis result](https://github.com/walaa-amer/VSD-HDP/assets/85279771/915d3c08-e8cc-48f6-98d8-25c699d37372)
+
+From this plot, we can find the rise and fall delay by clicking on the graph to find the coordinates of the points needed and subtracting these values.
 
 </details>
