@@ -2016,6 +2016,8 @@ then run:
 ```
 plot out vs in
 ```
+![d13 noise margin plot](https://github.com/walaa-amer/VSD-HDP/assets/85279771/edf95fb0-928f-4742-bdbf-75bd82f4045f)
+
 
 From the plot, we can find VIL and VIH, and then calculating NML and NMH. 
 In this case:
