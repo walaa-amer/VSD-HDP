@@ -1990,10 +1990,8 @@ From this plot, we can find the rise and fall delay by clicking on the graph to 
 
 In an inverter, the output will take some time to decrease from high to low as the input voltage increases. However, there is a range of low input values of Vin where Vout stays high (NML) and there is a range of high values of Vin where Vout is low (NMH).
 
-NML = VIL - VOL
-
-NMH = VOH - VIH
-
+NML = VIL - VOL   
+NMH = VOH - VIH   
 where VIL = first occurance of voltage at tangent slope = -1
 and VIH = second occurance of voltage at tangent slope = -1
 
