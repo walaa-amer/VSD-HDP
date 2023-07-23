@@ -1896,9 +1896,47 @@ In this case we have Wn = Wp and Ln = Lp. The simulation will result in this VTC
 
 ![d12 vtc of inveter](https://github.com/walaa-amer/VSD-HDP/assets/85279771/13088fc4-43d6-4151-94b8-66fd483efdcf)
 
-Increasing Wp = 2.5Wn and simulating would result in:
+Increasing Wp = 2.5Wn and simulating would result in the waveform on the right:
 
 
+
+The 2 waveforms' shapes are almost the same, which shows that the CMOS design is very robust.
+
+The robustness of the design is measured by the switching threshold where Vin = Vout. In the first waveform, VM ~ 1V, and in the second waveform, VM ~ 1.2V. In this point of the waveform, both transistors are saturated and Vgs = Vds and the 2 currents running in both transistors are equal in value but in different directions.
+
+To find the best value of Vm, we need to solve the following equation:
+IdsP = -IdsN
+IdsP + IdsN = 0
+
+We know that:
+ID = un . Cox . (W/L). [(Vgs-vt).Vdsat - (Vdsat^2)/2]
+
+So:
+IdsN = kn. [(Vm-vt).Vdsatn - (Vdsatn^2)/2]
+IdsN = kp. [(Vm-Vdd-vt).Vdsatp - (Vdsatp^2)/2]
+
+Making the equation:
+kn. [(Vm-vt).Vdsatn - (Vdsatn^2)/2] + kp. [(Vm-Vdd-vt).Vdsatp - (Vdsatp^2)/2] = 0
+
+Solving it for Vm gives:
+Vm = R.Vdd / (1+R) with R = [(Wp/Lp).kp'.Vdsatp]/[(Wn/Ln).kn'.Vdsatn]
+
+Going the other way around, we can find Wp and Wn from a specific value of Vm:
+IdsP = -IdsN
+kn. [(Vm-vt).Vdsatn - (Vdsatn^2)/2] = kp. [(-Vm+Vdd+vt).Vdsatp + (Vdsatp^2)/2]
+
+kn. Vdsatn. [(Vm-vt) - (Vdsatn)/2] = kp. Vdsatp. [(-Vm+Vdd+vt) + (Vdsatp)/2]
+
+[kn. Vdsatn]/[kp. Vdsatp] = [(-Vm+Vdd+vt) + (Vdsatp)/2] / [(Vm-vt) - (Vdsatn)/2]
+
+[(Wn/Ln) .kn'. Vdsatn]/[(Wp/Lp) .kp'. Vdsatp] = [(-Vm+Vdd+vt) + (Vdsatp)/2] / [(Vm-vt) - (Vdsatn)/2]
+
+(Wn/Ln)/(Wp/Lp) = [kp'.Vdsatp.[(-Vm+Vdd+vt) + (Vdsatp)/2]] / [kn'.Vdsatn.[(Vm-vt) - (Vdsatn)/2]]
+
+Wee can now plug in the value of Vm and find the ratio.
+
+As Wp increases, Vm is pulled more towards Vdd and the curve is shifted further to the right, rise delay decreases and fall delay increases. 
+At a ratio around 2, the fall time is equal to the rise time, which is a desired behavior, especially in the clock buffer cell design.
 
 </details>
 
@@ -1916,7 +1954,7 @@ Then use the command
 plot out vs in
 ```
 
-The result is this curve thatlets us find the threshold voltage which is equivalent in this case to around 0.8:
+The result is this curve thatlets us find the switching threshold voltage (VM) which is equivalent in this case to around 0.8:
 ![d12 outvsin plot](https://github.com/walaa-amer/VSD-HDP/assets/85279771/7ef140cb-2cc4-4842-980d-02a756d88a43)
 
 Then running the transient analysis:
@@ -1928,6 +1966,11 @@ This spice netlist looks as follows:
 
 ![d12 tran analysis code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/fe2322c2-59ae-452d-9b7e-95be537f8f3f)
 
+The pulse wave syntax is as follows:
+```
+Vx <input_node> <output_node> <start_value> pulse <start_val_pulse> <end_val_pulse> <start_time> <rise_time> <fall_time> <period>
+```
+
 Running and plotting using
 ```
 plot out time in
@@ -1937,5 +1980,52 @@ results in:
 ![d12 tran analysis result](https://github.com/walaa-amer/VSD-HDP/assets/85279771/915d3c08-e8cc-48f6-98d8-25c699d37372)
 
 From this plot, we can find the rise and fall delay by clicking on the graph to find the coordinates of the points needed and subtracting these values.
+
+</details>
+
+## Day 13
+
+<details>
+<summary>Noise Margins</summary>
+
+In an inverter, the output will take some time to decrease from high to low as the input voltage increases. However, there is a range of low input values of Vin where Vout stays high (NML) and there is a range of high values of Vin where Vout is low (NMH).
+
+NML = VIL - VOL
+NMH = VOH - VIH
+where VIL = first occurance of voltage at tangent slope = -1
+and VIH = second occurance of voltage at tangent slope = -1
+
+In these ranges of volatges, noise will not affect the output.
+
+For Wn = Wp: NML = NMH -> large noise margins from both sides
+As Wp increases, the PMOS is larger and able to hold the logic 1 in the capacitor for longer, so NML increases and NMH decreases, as the PMOS becomes stronger than the NMOS in the circuit.
+
+</details>
+
+<details>
+<summary>Noise Margins Simulation</summary>
+
+To run the simulation on ngspice:
+
+```
+ngspice day4_inv_noisemargin_wp1_wn036.spice
+```
+
+then run:
+
+```
+plot out vs in
+```
+
+From the plot, we can find VIL and VIH, and then calculating NML and NMH. 
+In this case:
+VIL = 0.754098
+VOH = 1.73636
+VIH = 0.987705
+VOL = 0.0863636
+->
+NML = VIL - VOL ~ 0.67
+NMH = VOH - VIH ~ 0.75
+
 
 </details>
