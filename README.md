@@ -1997,7 +1997,7 @@ and VIH = second occurance of voltage at tangent slope = -1
 
 In these ranges of voltages, noise will not affect the output.
 
-For Wn = Wp: NML = NMH -> large noise margins from both sides
+For Wn = Wp: NML = NMH -> large noise margins from both sides   
 As Wp increases, the PMOS is larger and able to hold the logic 1 in the capacitor for longer, so NML increases and NMH decreases, as the PMOS becomes stronger than the NMOS in the circuit.
 
 </details>
@@ -2019,14 +2019,14 @@ plot out vs in
 ![d13 noise margin plot](https://github.com/walaa-amer/VSD-HDP/assets/85279771/edf95fb0-928f-4742-bdbf-75bd82f4045f)
 
 
-From the plot, we can find VIL and VIH, and then calculating NML and NMH. 
-In this case:
-VIL = 0.754098
-VOH = 1.73636
-VIH = 0.987705
-VOL = 0.0863636
-->
-NML = VIL - VOL ~ 0.67
+From the plot, we can find VIL and VIH, and then calculating NML and NMH.   
+In this case:  
+VIL = 0.754098   
+VOH = 1.73636   
+VIH = 0.987705   
+VOL = 0.0863636   
+->   
+NML = VIL - VOL ~ 0.67   
 NMH = VOH - VIH ~ 0.75
 
 
