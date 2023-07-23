@@ -1866,7 +1866,7 @@ It is worth noting that the linear region in the Vin-Vout curve is a high gain r
 
 </details>
 
-## Day 12
+## Day 12 & 13
 
 <details>
 <summary>CMOS VTC SPICE Simulation</summary>
@@ -1983,7 +1983,7 @@ From this plot, we can find the rise and fall delay by clicking on the graph to 
 
 </details>
 
-## Day 13
+## Day 14
 
 <details>
 <summary>Noise Margins</summary>
