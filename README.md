@@ -2031,3 +2031,62 @@ NMH = VOH - VIH ~ 0.75
 
 
 </details>
+
+## Day 15
+
+<details>
+<summary>Power Supply Scaling</summary>
+
+The CMOS inveter's robustness should also be tested for sypply voltage scaling, which means a change in Vdd should nott affect the functionality of the inverter.
+
+The following code is  used to run a dc sweep over the input for 5 different values of Vdd:
+![d15 loop spice code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/21af237c-cc2d-4388-8d33-a765ca5a1ad7)
+
+The ".control" allows us to script in the usual coding syntax to do some complex operations.
+
+Comparing running at high vs low supply voltage:    
+Gain = dVout/dVin: larger for low voltage (advantage of low)
+energy = 0.5CV^2: lower for low voltage (advantage of low)
+rise and fall time: larger for low voltage (disadvantage of low)
+
+</details>
+
+<details>
+<summary>Design Variations</summary>
+
+Variations can come from different sources like:    
+- etchine: the process of chemically defining the shapes of different metal components. This process defines the overlap between metal layers. A distortion in the etched layers can lead to variations in a chip, mainly on the W and L characteristics of the MOSFET, and thus affect ID.
+- oxidation: inthis process, the oxidation process could lead to different variations across transistors, which will affect Cox, and thus affect ID.
+
+</details>
+
+<details>
+<summary>Design Variation Simulations</summary>
+
+The following code allows us to modify the width of the PMOS and NMOS 5 times (going from strong PMOS and weak NMOS to weak PMOS and strong NMOS) and apply a dc sweep over the input every time:
+
+![d15 variations code](https://github.com/walaa-amer/VSD-HDP/assets/85279771/2519fcb1-eb98-40dc-ab48-da41a2a97726)
+
+These variations would affect the switching threshold and the noise margins, but they keep them in a reasonable range, so they do not highly affect the robustness of the CMOS design.
+
+To run a strong PMOS and weak ?NMOS case on ngspice:
+
+```
+ngspice day5_inv_devicevariation_wp7_wn042.spice
+```
+
+Then run:
+
+```
+plot out vs in
+```
+
+The result plot is:
+![d15 variations simulation](https://github.com/walaa-amer/VSD-HDP/assets/85279771/02fcdae9-cdae-4c9b-8c10-747a8d68457b)
+
+
+where we can see that the switching threshold is around ~ 0.995V which is around 90mV higher than Vdd/2. The low noise margins are also much higher than the high noise margins. In this case we are looking at a stromg PMOS and weak NMOS.
+
+
+</details>
+
