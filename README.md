@@ -2103,3 +2103,24 @@ where we can see that the switching threshold is around ~ 0.995V which is around
 
 </details>
 
+## Day 16
+
+## Day 17
+
+<details>
+<summary>How to talk to computers</summary>
+
+A chip has different components:     
+1- Core: where the digital logic is placed. In the core, there are foundery IPs and Macros.    
+2- PADS: the communication line between the inside and the outside of the chip.
+3- Die: area of the chip on the silicon wafer.   
+
+
+</details>
+
+<details>
+<summary>Intro to RISC-V</summary>
+
+Communication with a compouter is established through their instruction set architecture (ISA). A program that needs to be run on your hardware is compiled to its assembly format that then is converted to the binary format executed in a particular layout. Another communication line between the laytout and the ISA is the RTL implementation. So the RTL implements the architecture which includes the ISA and the layout is generated through a RTL2GDS flow. So for the RISC-V, the flow becomes: RISC-V architecture -> RTL implementation -> layout
+
+</details>
