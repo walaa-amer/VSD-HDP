@@ -1661,7 +1661,8 @@ Max delay path:
 
 Min delay path:
 
-![Screenshot from 2023-07-01 17-26-52](https://github.com/walaa-amer/VSD-HDP/assets/85279771/dc154a24-3d43-4c39-b597-6e594434bd1d)
+![d9 timing report min](https://github.com/walaa-amer/VSD-HDP/assets/85279771/1c91da3e-ae44-4a45-b99c-f06878ce208e)
+
 
 </details>
 
