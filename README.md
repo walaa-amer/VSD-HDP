@@ -1639,7 +1639,7 @@ read_liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 read_verilog johnson_counter_net.v
 link_design johnson_counter
 read_sdc johnson_counter_const.sdc
-report_checks -fields {nets cap skew input_pins} -digits {4} > walaa_johnson.log
+report_checks -path_delay min_max -fields {nets cap skew input_pins} -digits {4} > walaa_johnson.log
 ```
 
 </details>
@@ -1650,7 +1650,7 @@ report_checks -fields {nets cap skew input_pins} -digits {4} > walaa_johnson.log
 
 Running on OpenSTA:
 
-![Screenshot from 2023-07-01 15-51-00](https://github.com/walaa-amer/VSD-HDP/assets/85279771/d4baf2e6-8ec6-45f9-905c-9b12d2b20547)
+![d9 timing report max](https://github.com/walaa-amer/VSD-HDP/assets/85279771/a328b10f-8970-47db-98f5-6a656c5469d2)
 
 
 Results in walaa_johnson.log:
