@@ -1650,14 +1650,14 @@ report_checks -path_delay min_max -fields {nets cap skew input_pins} -digits {4}
 
 Running on OpenSTA:
 
-![d9 timing report max](https://github.com/walaa-amer/VSD-HDP/assets/85279771/a328b10f-8970-47db-98f5-6a656c5469d2)
+![d9 opensta](https://github.com/walaa-amer/VSD-HDP/assets/85279771/79edeeff-4fd8-44e1-91a6-3251abab814a)
 
 
 Results in walaa_johnson.log:
 
 Max delay path:
 
-![Screenshot from 2023-07-01 17-19-46](https://github.com/walaa-amer/VSD-HDP/assets/85279771/0fccff71-046a-4b75-bbf3-403e95ac8944)
+![d9 timing report max](https://github.com/walaa-amer/VSD-HDP/assets/85279771/a328b10f-8970-47db-98f5-6a656c5469d2)
 
 Min delay path:
 
