@@ -2137,8 +2137,8 @@ The communication btewen software apps and hardware happen on the system softwar
 A PDK (Process Design Kit) is a collection of files used to model a fabrication process for the EDA tools used to design a IC. It has information such as The process design rules (DRC, LVS, PEX), device models, digital standard cell libraries, I/O liraries...
 
 For an ASIC design, the methodology followed is a RTL to GDSII flow as follows:     
-RTL    							PDK
-|    							|
+RTL    							PDK     
+|    							|     
 Synthesis -> floor and power planning -> placement -> Clock Tree Synthesis -> Routing -> Sign Off
 
 </details>
