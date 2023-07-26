@@ -2139,6 +2139,7 @@ A PDK (Process Design Kit) is a collection of files used to model a fabrication 
 For an ASIC design, the methodology followed is a RTL to GDSII flow as follows:     
 RTL    							PDK     
 |    							|     
+
 Synthesis -> floor and power planning -> placement -> Clock Tree Synthesis -> Routing -> Sign Off
 
 </details>
