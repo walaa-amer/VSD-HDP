@@ -2134,12 +2134,39 @@ The communication btewen software apps and hardware happen on the system softwar
 <details>
 <summary>SoC design and OpenLANE</summary>
 
+<details>
+<summary>Simplified RTL2GDSII flow</summary>
 A PDK (Process Design Kit) is a collection of files used to model a fabrication process for the EDA tools used to design a IC. It has information such as The process design rules (DRC, LVS, PEX), device models, digital standard cell libraries, I/O liraries...
 
-For an ASIC design, the methodology followed is a RTL to GDSII flow as follows:     
-RTL_____________________________________________________PDK______________________________GDSII   
-|_______________________________________________________|________________________________|    
+For an ASIC design, the methodology followed is a RTL to GDSII flow as follows:      
 
-Synthesis -> floor and power planning -> placement -> Clock Tree Synthesis -> Routing -> Sign Off
+(RTL)Synthesis -> floor and power planning -> placement (+PDK) -> Clock Tree Synthesis -> Routing -> Sign Off (GDSII)
 
+1- Synthesis: Converts RTL to a circuit out of the components from the standard cell library to generate the gate-level netlist (GLS) which is equivalent to the RTL.
+
+2- Floor and Power Planning: This step changes depending on whether we are designing a macro (component) in the chip or the whole chip. In chip floor planning,the chip is partitioned between different system building blocks and place the I/O pads. In macro floor planning, the macro floor dimensions pin locations and the rows definition are defined.   
+For power p-lanning, the power network is constructed. Chips are usually powered through external sources that connect to the chip through metal straps that use upper thicker metal layer characterized by lower resistance values.
+
+3- Placement:For macros, we place the gate-level entlist cells on the virtual rows. It is obvious that connected components shoud be placed closely to each other to reduce the interconnect delay and to enable successful routing afterwards. Pacement is typically done in 2 steps: global that tries to find optyimal positions for all cells = and these positions might not be legal so cells can overlap or go off rows, and tale placement wehere the global placement is altered to make them all legal.
+
+4- Clock Tree Synthesis: we create a clock distribution network to deliver the clock to all sequential elements with minimum skew.
+
+5- Routing: with components placed, we need now to establish connections between them. Given this placement and a number of metal leyrs, it is required to find a convenient pattern of horizontal and vertical metal lines to implement the nets that connect the cells together. The metal layer characteristics (thickness, pitch, the difference [], and the minumum width) are defined by the PDK. It also defines the vias used to connect different metal layers together. The skypwater PDK defines 6 routing layers. The lowest layer is the local interconnect layer made of titanium nitrite. The following 5 layers are all aluminum layers. For large routing grids, router usually use a divide and conquer method where first the global routing uses coarse-grained grids to generate the routing guides and then detailed routing uses fine-grained grids and the routing guides to implement the actual wiring.
+
+6- Signoff: We can now generate the final layout which is subjectto physical verifications such as design rules checking (DRC) and the layout 
+vs schematic (LVS) to make sure that the generated layout matches the gate-level netlist we started with. Finally, we need to run timing verification which is done though static timing analysis to check that timing constraints are met and the circuit can run at the designated frequency.
+</details>
+
+<details>
+<summary>OpenLANE Open Source tools</summary>
+
+Going through this process is harder using open source tools as you need tools qualification, calibration, and missing tools. For eFabless, the reference open source implementation flow which is called OpenLANE. The goal is to produce a clean GDSII with no human intervention (no human-in-the-loop) which means its has no LVS violations, no DRC violations, and hopefully no timing violations. This flow is tuned for the SkyWater 130nm Open PDK. It can be used to harden macros and chips. It has 2 modes of operation: autonomous (with 1 push button get the GDSII) or interactive (run commands one by one and check the results of each step). It has design space exploration feature which can be used to find the best set of flow configurations. It comes with a large number of design examples on the public github repo.
+
+The OpenLANE ASIC flow starts with RTL Synthesis using yosys and abc (offers strategies that optimize for area and others for timing) followed by static timing analysis using OpenSTA. The synthesis exploration allows us to generate report to check how the design delay and area are affected by the synthesis strategies and pick the best one. OpenLANE also has design exploration abilities that sweeps the design configurations and generate reports showing design metrics to find the best one. This design exploration can also be used for regression testing.    
+After synthesis comes the design for test (DFT) step used for scan insertion, automoatic test pattern generation, test patterns compaction, and fault coverage and simulation. This step is optional and will add logic that can be used for testing later. It will also add digital control which will give access to the internal sketching.    
+Nest, there is the physical implementation implemented using the OpenROAD. This tool implements floor and power planning , end decoupling capacitors and Tap cells insertion, global and detailed placement, post-placement optimization, clock tree synthesis, and global and detailed routing.   
+Next, logic equivalence checking should be done using yosys since in the previous steps we applied some optimiations which change the gate-level netlist and thus we need to compare that the 2 versions are functionally equivalent.   
+The next step is fake antenna diodes insertion which is required to address the antenna rules violations (when a metal wire segment is fabricated and is long enough to act as an antenna, it can collect charges and damage transistors connected to it during fabrication).IF the router fails to eliminate these violations, there are 2 solutions: bridging which attaches a higher layer intermediary or adding antenna diode cells to leak away the charges and are provided by the standard cell library. In OpenLANE, fake antenna diode cells tjhat amtch the footprints of real ones are added to the SCL and used after cell input after placement. An Antenna Checker is then run and if it reports a violation on the cell input pin, the fake diode is replaced by a real one.    
+Finally, the sign-off includes STA, design rule checking and layout vs schematic. Timing reports are generated to check for any timing violations.
+</details>
 </details>
