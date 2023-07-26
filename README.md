@@ -2115,12 +2115,30 @@ A chip has different components:
 2- PADS: the communication line between the inside and the outside of the chip.
 3- Die: area of the chip on the silicon wafer.   
 
-
-</details>
-
 <details>
 <summary>Intro to RISC-V</summary>
 
 Communication with a compouter is established through their instruction set architecture (ISA). A program that needs to be run on your hardware is compiled to its assembly format that then is converted to the binary format executed in a particular layout. Another communication line between the laytout and the ISA is the RTL implementation. So the RTL implements the architecture which includes the ISA and the layout is generated through a RTL2GDS flow. So for the RISC-V, the flow becomes: RISC-V architecture -> RTL implementation -> layout
+
+</details>
+
+<details>
+<summary>From Software Application to Hardware</summary>
+
+The communication btewen software apps and hardware happen on the system software level where applications are compiled to executable assembly files and those are then assembled to amchine code that runs on he hardware
+
+</details>
+</details>
+
+
+<details>
+<summary>SoC design and OpenLANE</summary>
+
+A PDK (Process Design Kit) is a collection of files used to model a fabrication process for the EDA tools used to design a IC. It has information such as The process design rules (DRC, LVS, PEX), device models, digital standard cell libraries, I/O liraries...
+
+For an ASIC design, the methodology followed is a RTL to GDSII flow as follows:     
+RTL    							PDK
+|    							|
+Synthesis -> floor and power planning -> placement -> Clock Tree Synthesis -> Routing -> Sign Off
 
 </details>
