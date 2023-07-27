@@ -2223,4 +2223,46 @@ The following screenshot shows the end of the installation process:
 
 
 </details>
+
+<details>
+<summary>picorv32a using OpenLANE</summary>
+
+I invoked the OpenLANE tool in the OpenLANE directoy using:
+
+```
+make mount
+```
+
+Then I ran the flow eith the -interactive flag (to diable automatic mode) using:
+
+```
+./flow.tcl -interactive
+```
+
+In the new prompt I ran:
+
+```
+package require openlane 0.9
+```
+
+All of the designs are stored in the /designs directory. If we want to add our own design add a folder for it there. In that folder we add the src files in a "\src" file and the "config.tcl file". This file will overwrite the OpenLANE default configurations. Another "sky130A_sky130_fd_sc_hd__config.tcl" file would overwrite the changes in "config.tcl" (it is the highest level config file but not essential for every design).
+
+Before running the synthesis and beginning to run the flow, we need to setup the design using:
+
+```
+prep design picorv32a
+```
+
+This step will first merge the 2 LEF files (the cell specific one and the technology/layers one). It will create a new runs folder in our design folder and in that run it will create another folder specific to this run with all of the needed files for each step of the OpenLANE tools and a config.tcl file that will have the final configuration of the design and a cmds file that hass the commands ran. The changes in the flow will be reflected in the config.tcl file immediately after running them.
+
+For more info abut the OpenLANE tools: Youtube: fossi dial up
+
+The results of the synthesis can be found in the /log/synthesis/1-synthesis.log file or in the reports/synthesis/1-synthesis.AREA_0.stat.rpt file.   
+To find the flop ratio, we divide the number of dff cells by the total number of cells as seen in the screenshot below:
+
+![d17 openlane synth nbr cells](https://github.com/walaa-amer/VSD-HDP/assets/85279771/51c8e0cc-2da9-4dd5-84e7-fcf869a0d0d9)
+
+In this case the ratio is: 1596/10104*100 ~ 15.8%
+
+</details>
 </details>
