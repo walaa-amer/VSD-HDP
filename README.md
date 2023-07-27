@@ -2169,4 +2169,13 @@ Next, logic equivalence checking should be done using yosys since in the previou
 The next step is fake antenna diodes insertion which is required to address the antenna rules violations (when a metal wire segment is fabricated and is long enough to act as an antenna, it can collect charges and damage transistors connected to it during fabrication).IF the router fails to eliminate these violations, there are 2 solutions: bridging which attaches a higher layer intermediary or adding antenna diode cells to leak away the charges and are provided by the standard cell library. In OpenLANE, fake antenna diode cells tjhat amtch the footprints of real ones are added to the SCL and used after cell input after placement. An Antenna Checker is then run and if it reports a violation on the cell input pin, the fake diode is replaced by a real one.    
 Finally, the sign-off includes STA, design rule checking and layout vs schematic. Timing reports are generated to check for any timing violations.
 </details>
+
+<details>
+<summary>OpenLANE and tool installation</summary>
+
+
+https://docs.google.com/document/d/1Z5t7xWpG_gdppLk_ZVfgKVr5hrQZISlkdwCWSjYg7p0/edit?pli=1
+
+
+ </details>
 </details>
