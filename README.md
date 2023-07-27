@@ -2250,7 +2250,7 @@ All of the designs are stored in the /designs directory. If we want to add our o
 Before running the synthesis and beginning to run the flow, we need to setup the design using:
 
 ```
-prep design picorv32a
+prep -design picorv32a
 ```
 
 This step will first merge the 2 LEF files (the cell specific one and the technology/layers one). It will create a new runs folder in our design folder and in that run it will create another folder specific to this run with all of the needed files for each step of the OpenLANE tools and a config.tcl file that will have the final configuration of the design and a cmds file that hass the commands ran. The changes in the flow will be reflected in the config.tcl file immediately after running them.
@@ -2263,6 +2263,34 @@ To find the flop ratio, we divide the number of dff cells by the total number of
 ![d17 openlane synth nbr cells](https://github.com/walaa-amer/VSD-HDP/assets/85279771/51c8e0cc-2da9-4dd5-84e7-fcf869a0d0d9)
 
 In this case the ratio is: 1596/10104*100 ~ 15.8%
+
+</details>
+</details>
+
+## Day 18
+
+<details>
+<summary>Floor plan</summary>
+
+<details>
+<summary>Floor planning considerations</summary>
+<details>
+<summary>Defining the width and height of core and die</summary>
+
+To find W and H, we need to find the dimensions of the standard cells and flipflops used in the netlist. Let's assume the following netlist:
+
+
+Placed next to each other, the different components of the netlist have a total width of 2 units and height of 2 units so a total area of 4 units:
+
+On a wafer, several dies exist. Each die has a core where the logic of the netlist is implemented.    
+Utilization factor of the core = (area occupied by netlist)/(total area of the core)
+Apect ratio of the core = height/width (characterizes the shape of the core)
+
+</details>
+<summary>Defining locations of preplaced cells</summary>
+
+A part of the netlist might be reused several times. The best way t implement thoseis by black boxing them and using them as block modules. These modules have fixed locations in the chip decided before placement thus called preplaced cells. These locations will not be modified by the tool which will only automate placement and routing for other components on the chip.
+
 
 </details>
 </details>
