@@ -2274,8 +2274,8 @@ In this case the ratio is: 1596/10104*100 ~ 15.8%
 
 <details>
 <summary>Floor planning considerations</summary>
-<details>
-<summary>Defining the width and height of core and die</summary>
+
+### Defining the width and height of core and die
 
 To find W and H, we need to find the dimensions of the standard cells and flipflops used in the netlist. Let's assume the following netlist:
 
@@ -2286,11 +2286,11 @@ On a wafer, several dies exist. Each die has a core where the logic of the netli
 Utilization factor of the core = (area occupied by netlist)/(total area of the core)
 Apect ratio of the core = height/width (characterizes the shape of the core)
 
-</details>
-<summary>Defining locations of preplaced cells</summary>
+### Defining locations of preplaced cells
 
 A part of the netlist might be reused several times. The best way t implement thoseis by black boxing them and using them as block modules. These modules have fixed locations in the chip decided before placement thus called preplaced cells. These locations will not be modified by the tool which will only automate placement and routing for other components on the chip.
 
+### Defining locations of preplaced cells
 
-</details>
+
 </details>
