@@ -2247,6 +2247,8 @@ package require openlane 0.9
 
 All of the designs are stored in the /designs directory. If we want to add our own design add a folder for it there. In that folder we add the src files in a "\src" file and the "config.tcl file". This file will overwrite the OpenLANE default configurations. Another "sky130A_sky130_fd_sc_hd__config.tcl" file would overwrite the changes in "config.tcl" (it is the highest level config file but not essential for every design).
 
+We can find a list of the configuration switches (variables) for each stage of the flow in the README file in the configuration folder.
+
 Before running the synthesis and beginning to run the flow, we need to setup the design using:
 
 ```
@@ -2279,8 +2281,9 @@ In this case the ratio is: 1596/10104*100 ~ 15.8%
 
 To find W and H, we need to find the dimensions of the standard cells and flipflops used in the netlist. Let's assume the following netlist:
 
+![d18 circuit example](https://github.com/walaa-amer/VSD-HDP/assets/85279771/901f9781-d066-402a-b596-e1089803aa26)
 
-Placed next to each other, the different components of the netlist have a total width of 2 units and height of 2 units so a total area of 4 units:
+Placed next to each other, the different components of the netlist have a total width of 2 units and height of 2 units so a total area of 4 units.
 
 On a wafer, several dies exist. Each die has a core where the logic of the netlist is implemented.    
 Utilization factor of the core = (area occupied by netlist)/(total area of the core)
@@ -2290,7 +2293,97 @@ Apect ratio of the core = height/width (characterizes the shape of the core)
 
 A part of the netlist might be reused several times. The best way t implement thoseis by black boxing them and using them as block modules. These modules have fixed locations in the chip decided before placement thus called preplaced cells. These locations will not be modified by the tool which will only automate placement and routing for other components on the chip.
 
-### Defining locations of preplaced cells
+### Surround pre-placed cells with decoupling capacitors
+
+One issue that might be faced is the voltage drop from the voltage source to a gate in the circuit that is switching from 0 to 1. This voltage drop will be compensated by a decoupling capacior, which is a huge capacitor that decouples parts of the citcuit from the source since it becomes the vdd source for the circuit and providesthe needed current for switchng as shown below:
+
+![d18 decoupling cap](https://github.com/walaa-amer/VSD-HDP/assets/85279771/08a265be-c746-4cab-8f54-6d519df9b145)
 
 
+### Power planning
+
+Assuming several gates in the circuit are switching from low to high, the decoupling capacitor needs to provide all of them with the needed current which could lead to a voltage droop. The same case applies for the ground where several gates are discharging to the same line causing a ground bounce shown in the figure below:
+
+![d18 ground bounce](https://github.com/walaa-amer/VSD-HDP/assets/85279771/1cdaa34e-5453-4a6e-969e-e205edc01464)
+
+
+To solve this problem, a power plan is used to distribute several Vdd and Vss pins across the core as shown below:
+
+![d18 power planning](https://github.com/walaa-amer/VSD-HDP/assets/85279771/df57013d-50e7-46ea-9cdb-267724e141af)
+
+
+### Pin placement
+
+Pin placement is highly depenedent on the logic design inside the chip. Cells are put in proximity of their input pins. Clock pins are larger as they drive many cells.
+
+### Logical cell placemnt blockage
+
+The area between the core and the die are blocked for the tool to avoid placement and routing in those areas.
+</details>
+
+<details>
+<summary>Floor planning using OpenLANE</summary>
+
+The parameters set for the floopplan stage are found in the floorplan.tcl file in the configuration folder. This is the lowest priority config file. These parameters are overwritten in the config.tcl file in the design folder that we are working in.
+
+To run the floor plan:
+
+```
+run_floorplan
+```
+
+To check the results, we open the ".def" file in the "/results/floorplan" folder. This file will give us the area of the die by specifying the coordinates of the lower left point and the upper right point of the die using the units specified right above the coordinate statement. This file will also show where each component is placed on the die.
+
+To visualize the placement, we use magic:
+
+```
+magic -T <Tech_file_path> lef read <merged.lef_file_path def read <design_def_file_path> &
+```
+
+In the picorv32a case, this command in the floorplan result folder would be:
+
+```
+magic -T /<open_pdks_path>/open_pdks/sky130/magic/sky130.tech lef read ../../merged.nom.lef def read picorv32a.def &
+```
+
+I downloaded the pdk files from the folowing open_pdks github repo: https://github.com/RTimothyEdwards/open_pdks/tree/master/sky130.
+
+The floorplan is show below:
+
+
+
+</details>
+</details>
+
+<details>
+<summary>Placement</summary>
+
+We now have the floorplan  with the preplacements and have the physical view of the circuit from the synthesis. We need now to place these components on the floorplan. The components would be placed as close as possible to other components they communicate with or to the die pins they connect to. The placement is not allowed in the preplaced areas occupied by preplaced blocks and decouplig capacitors.
+
+The next step would be to optimize the placement based on estimation of wire lengths and capacitances. Intermediate components are added in a long path to conserve the signal and not lose it to large capacitance. These components are called repeaters or buffers. The results would look as follows:
+
+![d18 optimzed placement](https://github.com/walaa-amer/VSD-HDP/assets/85279771/11bbc9d3-616f-407f-97fc-ebf46f3891df)
+
+
+<details>
+<summary>Placement using OpenLANE</summary>
+
+There are 2 levels of placement: global and detailed. Detailed placement legalizes the global placement.
+
+To run global placement:
+
+```
+run_placement
+```
+
+The visualization of the placement is also done through magic in the placement result folder:
+
+```
+magic -T /<open_pdks_path>/open_pdks/sky130/magic/sky130.tech lef read ../../merged.nom.lef def read picorv32.def &
+```
+
+Showing the following result:
+
+
+</details>
 </details>
