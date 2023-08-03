@@ -2401,6 +2401,7 @@ magic -T /<open_pdks_path>/open_pdks/sky130/magic/sky130.tech lef read ../../mer
 I downloaded the pdk files from the folowing open_pdks github repo: https://github.com/RTimothyEdwards/open_pdks/tree/master/sky130.
 
 The floorplan is show below:
+![d18 floorplan magic](https://github.com/walaa-amer/VSD-HDP/assets/85279771/748a92d1-446d-4410-bee3-f0686c611ba2)
 
 
 
@@ -2435,6 +2436,11 @@ magic -T /<open_pdks_path>/open_pdks/sky130/magic/sky130.tech lef read ../../mer
 ```
 
 Showing the following result:
+![d18 magic placement](https://github.com/walaa-amer/VSD-HDP/assets/85279771/da6ad11c-0aff-4920-bd9c-2bebadc0b734)
+
+Zooming in shows how the components are placed between the rows:
+![d18 placement magic zoom](https://github.com/walaa-amer/VSD-HDP/assets/85279771/422388f5-228f-4fb1-a5d3-16a759a8e265)
+
 
 
 </details>
