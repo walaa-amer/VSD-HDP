@@ -2105,6 +2105,58 @@ where we can see that the switching threshold is around ~ 0.995V which is around
 
 ## Day 16
 
+<details>
+<summary>Post-Synthesis STA on my design</summary>
+
+I ran post-syntesis STA on my Johnson counter design on different ss (slow), ff (fast), tt (typical). The .lib files were cloned from the following github repo: https://github.com/Geetima2021/vsdpcvrd.    
+The constraints added are the following:
+
+```
+create_clock -name MYCLK -per 10 [get_ports clk]
+set_clock_latency -source 1 [get_clocks MYCLK]
+set_clock_latency 1 [get_clocks MYCLK]
+set_clock_uncertainty 0.5 [get_clocks MYCLK]
+set_clock_uncertainty -hold 0.1 [get_clocks MYCLK]
+set_output_delay -max 5 -clock [get_clocks MYCLK] [get_ports count]
+set_output_delay -min 1 -clock [get_clocks MYCLK] [get_ports count]
+set_load -max 0.4 [get_ports count]
+set_load -min 0.1 [get_ports count]
+```
+
+And I ran the johnson_counter_script.tcl file to apply and evaluate the constraints for every .lib file and saved the results in a corresponsing log file:
+
+```
+read_liberty vsdpcvrd/resources/timing_libs/sky130_fd_sc_hd__X.lib
+read_verilog johnson_counter_net.v
+link_design johnson_counter
+read_sdc johnson_counter_const.sdc
+report_checks -path_delay min_max -fields {nets cap skew input_pins} -digits {4} > walaa_johnson_X.log
+report_tns >> walaa_johnson_X.log
+```
+
+
+</details>
+
+
+<details>
+<summary>Resultsn</summary>
+	
+I collected the WNS (worst negative slack), the WHS (worst hold slack), and the TNS (total negative slack) and put them in the table below:
+
+![d16 pvt tble](https://github.com/walaa-amer/VSD-HDP/assets/85279771/890ce083-9484-4c76-acb2-c57fb72466a9)
+
+
+They are also represented in the folowing plot:
+
+![d16 plot](https://github.com/walaa-amer/VSD-HDP/assets/85279771/846afbf0-91d3-4005-8452-23ca0533b10e)
+
+
+
+
+
+
+</details>
+
 ## Day 17
 
 <details>
