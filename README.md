@@ -2445,3 +2445,39 @@ Zooming in shows how the components are placed between the rows:
 
 </details>
 </details>
+
+<details>
+<summary>Cell design flow</summary>
+
+Standard cells are the building block of any design as they are used to model different components like the buffer and flip-flop. They are introduced in a library where different cells with different functionalities are presented in different sizes and different threshold voltages. To design a cell, the process is separated into 3 steps. 
+
+The first one is the inputs that you get from a foundary like the PDKs, DRC and LVS rules from the tech file, the spice models that have specified parameters set (such as Vt0, kn...), library and user defined specs such as the cell height (space between row and row in the die), the supply voltage, the metal layer requirements, and the pin locations, drawn gate length...
+
+The second one is the design step. First we go through circuit design where we define the functionality of the cell and build its layout. This step is based on Spice simulations where you can find the threshold voltage, width ratios... The second part is layout design where you get the pmos and nmos network graphs to find Euler's path and use the result to build a stick diagram of the circuit. Next we convert this diagram to fit the DRC rules we got from the inputs.
+
+The final step is extracting thelutputs from the design. The outputs consist basically of the CDL (circuit design language fro. the circuit design step), the GDSII, the LEF, and the extracted spice netlist (.cir). Finally we use these outputs to go through characterization flow:
+
+1- read the model files (nmos and pmos).   
+2- read extracted netlist.   
+3- recognize the behavior of the design.   
+4- read the sub-circuits.    
+5- attach power supply.   
+6- apply stimulus.   
+7- specify output capacitance.      
+8- specify the necessary simulation command.   
+9- feed in these steps as a config file for a software called GUNA.     
+
+The output of this tool will be timing,noise, power .libs and function
+
+
+Note: we can include a sub-circuit (.sub file) using:
+
+```
+.include extra.sub
+```
+
+and use the cells defined in it in the spice file where we add resistances and capacitances to our design.
+
+
+
+</details>
