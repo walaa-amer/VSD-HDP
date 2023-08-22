@@ -2478,6 +2478,20 @@ Note: we can include a sub-circuit (.sub file) using:
 
 and use the cells defined in it in the spice file where we add resistances and capacitances to our design.
 
+<details>
+<summary>Timing Characterization</summary>
+
+Some variables allow us to understand basic timing characteristics. These variables are:
+1- slew_low_rise_thr and slew_high_rise_thr: these are used to calculate the slew (transition time) of a the rising waveform's slope (ex: t(80%) - t(20%)).
+2- slew_low_fall_thr and slew_high_fall_thr: these are used to calculate the slew (transition time) of a the falling waveform's slope (ex: t(20%) - t(80%)).
+3- in_rise_thr and out_rise_thr: these are values that allow us to calculate the propagation delay for a rising waveform. (ex: t(out50%) - t(in50%)).
+4- in_fall_thr and out_fall_thr: these are values that allow us to calculate the propagation delay for a falling waveform. (ex: t(out50%) - t(in50%)).
+
+The choice of thresholds is very important since for example the propagation delay can become negative if taken at 40% for some waveform.
 
 
 </details>
+</details>
+
+
+## Day 19
