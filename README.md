@@ -2495,3 +2495,36 @@ The choice of thresholds is very important since for example the propagation del
 
 
 ## Day 19
+
+<details>
+<summary>Labs for CMOS inverter ngspice simulation</summary>
+
+<details>
+<summary>Modifying floor plan (ex: IO placement)</summary>
+
+to modify the floorplan, w3 can simply find the switch name that we desire changing in the configuration files (previously explained) and run the flow again using the commands:
+
+```
+set <switch_name> <value>
+run_floorplan
+```
+
+ex:
+
+```
+set ::env(FP_IO_MODE ) 2
+run_floorplan
+```
+
+and then we can visualize the changes using magic.
+
+
+</details>
+
+<details>
+<summary>SPICE deck creation for inverter</summary>
+
+
+
+</details>
+</details>
