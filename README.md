@@ -2481,11 +2481,11 @@ and use the cells defined in it in the spice file where we add resistances and c
 <details>
 <summary>Timing Characterization</summary>
 
-Some variables allow us to understand basic timing characteristics. These variables are:
-1- slew_low_rise_thr and slew_high_rise_thr: these are used to calculate the slew (transition time) of a the rising waveform's slope (ex: t(80%) - t(20%)).
-2- slew_low_fall_thr and slew_high_fall_thr: these are used to calculate the slew (transition time) of a the falling waveform's slope (ex: t(20%) - t(80%)).
-3- in_rise_thr and out_rise_thr: these are values that allow us to calculate the propagation delay for a rising waveform. (ex: t(out50%) - t(in50%)).
-4- in_fall_thr and out_fall_thr: these are values that allow us to calculate the propagation delay for a falling waveform. (ex: t(out50%) - t(in50%)).
+Some variables allow us to understand basic timing characteristics. These variables are:     
+1- slew_low_rise_thr and slew_high_rise_thr: these are used to calculate the slew (transition time) of a the rising waveform's slope (ex: t(80%) - t(20%)).    
+2- slew_low_fall_thr and slew_high_fall_thr: these are used to calculate the slew (transition time) of a the falling waveform's slope (ex: t(20%) - t(80%)).    
+3- in_rise_thr and out_rise_thr: these are values that allow us to calculate the propagation delay for a rising waveform. (ex: t(out50%) - t(in50%)).     
+4- in_fall_thr and out_fall_thr: these are values that allow us to calculate the propagation delay for a falling waveform. (ex: t(out50%) - t(in50%)).     
 
 The choice of thresholds is very important since for example the propagation delay can become negative if taken at 40% for some waveform.
 
@@ -2524,6 +2524,47 @@ and then we can visualize the changes using magic.
 <details>
 <summary>SPICE deck creation for inverter</summary>
 
+Spice deck:
+
+1- Model description:    
+Definitions needed:        
+a- component connectivity.   
+b- component value.   
+c- identifying nodes.  
+
+2- Simulation commands   
+
+3- Including model files defining parameters for nmos and pmos.
+
+
+
+</details>
+
+<details>
+<summary>GitHub repo for labs</summary>
+
+The GitHub repo used for the labs is cloned using the following link:
+
+```
+git clone https://github.com/nickson-jose/vsdstdcelldesign
+```
+
+The README of this repo has a step-by-step guide on how to create an inverter cell using magic.
+
+</details>
+</details>
+
+<details>
+<summary>Inception layout: CMOS fabrication</summary>
+<details>
+<summary>Fabrication steps</summary>
+
+1- substrate selection: most common type is a p-type substrate of high resistivity doped with impurities with a doping level less than yhe well doping level.   
+2- active region creation for transistors: first a layer of silicon dioxide is added followed by a layer of silicon nitrate. Then a photoresistive layer
+to define mask regions by covering these specific regions and applying UV light to the photoresist, dissolving all non-covered parts and leaving the covered ones. These covered areas are protected from etching the silicon nitrate. The remaining resistis then removed, leaving only these areas with
+silicon nitarte. after that, everything is put in an oxidation Furness that wikk grow the silicon dioxide. the areas protected by the silicon nitrate will not grow and the surroundings will. This process is called 
+local oxidation of silicon (LOCOS) which will stop 2 transistors from communicating with each other. Remaining silicon nitrate is then removed.    
+3- N-well and P-well formation:
 
 
 </details>
