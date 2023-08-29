@@ -2587,6 +2587,7 @@ magic -T ./libs/sky130A.tech sky130_inv.mag &
 
 And obtained the following:
 
+![d19 inverter magic layout](https://github.com/walaa-amer/VSD-HDP/assets/85279771/773a55b7-ab2a-4fc0-8721-5293fd91c434)
 
 
 To extract the .spice file from the .mag file, I usee the following commands in the prompt:
@@ -2596,6 +2597,39 @@ ext2spice cthresh 0 rethresh 0
 ext2spice
 ```
 
+Some modifications to the spice deck are needed. Following is the final spice file with every modification:
+
+![d19 spice inv modifications](https://github.com/walaa-amer/VSD-HDP/assets/85279771/7f6fae16-15e0-48f2-a44b-3c901cfa6147)
+
+
+1- the smallest unit box in the magic layout (max zoom in) is of size 0.01u (read on the command prompt).   
+2/3- the model library files for the nmos and pmos are included.   
+4- comment since we want to add control commands.     
+5- Added a power supply between node VPWR and node 0 and of value 3.3V.    
+6- Added a ground power supply.    
+7- Added a pulse power supply for the inputs (syntax previously described rise-fall-on-off).   
+8- comment the ends since we want to add control commands.    
+9- add a transient analysis command from 1ns to 20ns.    
+10- run the transient analysis.    
+11- end the spice deck.    
+(+change C3 value to 0.2fF)
+
+Running the simulation and plotting the output wrt time with input a using:
+
+```
+ngspice sky130_inv.spice
+plot y vs time a
+```
+
+We get the following result:
+
+
+We want to characterize this inverter cell, meaning that we want to find the rise transition time (time needed for the output waveform to go from 20% to 80% of maximum), fall delay (time to go from 80 to 20), and the propagation delay (time between inout rising to 20% and output to drop to 20%).   
+
+For this inverter case (zoom in using ngspice by creating a box using the right click button):
++ rise time is 0.03765ns
++ fall time is 0.05547ns
++ propagation delay (rising output) is 0.03248ns
 
 
 </details>
