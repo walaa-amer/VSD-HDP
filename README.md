@@ -2521,6 +2521,7 @@ and then we can visualize the changes using magic.
 
 </details>
 
+
 <details>
 <summary>SPICE deck creation for inverter</summary>
 
