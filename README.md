@@ -2579,6 +2579,24 @@ The README of this repo has a step-by-step guide on how to create an inverter st
 
 Showing the layout in LEF on magic, we can check what each layer is by selecting the region by clicking 'S' and entering "what" in the command prompt.
 
+To view the layout with the magic tool, I ran the following command:
+
+```
+magic -T ./libs/sky130A.tech sky130_inv.mag &
+```
+
+And obtained the following:
+
+
+
+
+To extract the .spice file from the .mag file, I usee the following commands in the prompt:
+```
+extract all
+ext2spice cthresh 0 rethresh 0
+ext2spice
+```
+
 
 
 </details>
