@@ -2623,6 +2623,8 @@ plot y vs time a
 
 We get the following result:
 
+![d19 inverter characterization](https://github.com/walaa-amer/VSD-HDP/assets/85279771/3b6b950d-51c8-4487-b687-b9f480e62993)
+
 
 We want to characterize this inverter cell, meaning that we want to find the rise transition time (time needed for the output waveform to go from 20% to 80% of maximum), fall delay (time to go from 80 to 20), and the propagation delay (time between inout rising to 20% and output to drop to 20%).   
 
