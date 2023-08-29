@@ -2589,7 +2589,6 @@ And obtained the following:
 
 
 
-
 To extract the .spice file from the .mag file, I usee the following commands in the prompt:
 ```
 extract all
