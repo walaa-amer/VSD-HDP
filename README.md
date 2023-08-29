@@ -2496,8 +2496,6 @@ The choice of thresholds is very important since for example the propagation del
 
 ## Day 19
 
-<details>
-<summary>Labs for CMOS inverter ngspice simulation</summary>
 
 <details>
 <summary>Modifying floor plan (ex: IO placement)</summary>
@@ -2537,23 +2535,8 @@ c- identifying nodes.
 
 3- Including model files defining parameters for nmos and pmos.
 
-
-
 </details>
 
-<details>
-<summary>GitHub repo for labs</summary>
-
-The GitHub repo used for the labs is cloned using the following link:
-
-```
-git clone https://github.com/nickson-jose/vsdstdcelldesign
-```
-
-The README of this repo has a step-by-step guide on how to create an inverter cell using magic.
-
-</details>
-</details>
 
 <details>
 <summary>Inception layout: CMOS fabrication</summary>
@@ -2565,7 +2548,37 @@ The README of this repo has a step-by-step guide on how to create an inverter ce
 to define mask regions by covering these specific regions and applying UV light to the photoresist, dissolving all non-covered parts and leaving the covered ones. These covered areas are protected from etching the silicon nitrate. The remaining resistis then removed, leaving only these areas with
 silicon nitarte. after that, everything is put in an oxidation Furness that wikk grow the silicon dioxide. the areas protected by the silicon nitrate will not grow and the surroundings will. This process is called 
 local oxidation of silicon (LOCOS) which will stop 2 transistors from communicating with each other. Remaining silicon nitrate is then removed.    
-3- N-well and P-well formation:
+3- N-well and P-well formation: An area (half) is covered with a mask and then the whole surface is exposed to UV light dissolving the exposed photoresist (half). The mask is removed and the whole surface is bombarded with boron (p-type impurity) at high energy to diffuse into the p-substrate and create the p-well. we will then add photoresist over the whole surface and cover the p-well with a mask, exposing the whole surface to UV light, dissolving the photoresist over the surface that is not the p-well. the mask is then removed and the whole surface is exposed to phosphorous (n-type impurity) at high energy to create the n-well. expose the whole p-substrate to a high temperature furnace to expand the depth of the wells.
+
+4- Formation of gate: 2 important terms that are important to gate formation since they control Vt are the doping concentration (NA) and the oxide capacitance (Cox). The n-well covered and the p-well exposed, the surface is hit with boronat low energy whcih will only affect the surface.
+We repeat the same step to the n-well with arsenic at low energy also only affecting the surface of the well. at this point, the oxide layer is damaged, so it is etched/stripped and regrown to give high quality oxide.
+To form, the gate, a polysilicon layer then photoresist is deposited on the whole surface and 2 masks in the middle of the 2 wells are placed to keep the photoresist only under the gate masks.this will alow to dissolve the polysilicon everywhere other than under the 2 masks, to create the gates.
+
+5- Lightly doped drain formation (LDD): for each well, we need a source and a drain.for an nmos created in an n-well, we need to create the P+ and P- terminals for a doping profile of P+, P-, N. for a pmos in a p-well, we need to create the N+ and N- for a doping profile of N+, N-, P. But why do we need this specific profile? why not P+, N, N? There are 2 reasons: a) the hot electron effect where the device size reduces and the power supply is not changes (E = V/d) the electric field increases, so the energy carrierw (holes and electrons) become high in energy, breaking silicon-silicon bonds leading to an increase in the number of electrons and holes and might increase the voltage barrier b) short channel effect: the drain penetrates the channel, so it becomes hard for the gate to control the current. The steps to achieve the profile is to first cover the n-well and expose the p-well and hit the surface with phosphorous to implant n-type impurities at the surface of the p-well (lightly doped). The same is applied to the n-well to create p-implants.
+
+6- 
+
+7- Forming contacts and interconnects: deposit titanium on the wafer surface using sputtering (hitting titanium with argons gas which will release electrons into the substrate). the wafer is then heated in N2 ambient to induce a reaction that creates a low resistance titanium diosilicon layer on top of the gates and the implants only. using masking, titanium diosilicon is only left on the drains and sources to create the interconnects.
+
+8- Higher level metal formation: Thick layer of SiO2 doped with phosphorous or boron is deposited on the wafer surface. 
+the surface is then planarized and "drilled" using masking to remove the SiO2 from the any point from the wafer that we would like to connect to higher level metal layer. these holes are filled with tungsten and then cover only the top layer of the holes with aluminium. To extend some of these contacts to higher layers, we repeat this process. Finally, the wafer is covered with a top dielectric to protect the chip.
+
+
+</details>
+
+<details>
+<summary>Labs for CMOS inverter ngspice simulation</summary>
+
+The GitHub repo used for the labs is cloned using the following link:
+
+```
+git clone https://github.com/nickson-jose/vsdstdcelldesign
+```
+
+The README of this repo has a step-by-step guide on how to create an inverter standard cell using magic.
+
+Showing the layout in LEF on magic, we can check what each layer is by selecting the region by clicking 'S' and entering "what" in the command prompt.
+
 
 
 </details>
