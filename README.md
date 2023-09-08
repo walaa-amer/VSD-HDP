@@ -2635,4 +2635,63 @@ For this inverter case (zoom in using ngspice by creating a box using the right 
 
 
 </details>
+
+<details>
+<summary>Magic DRC</summary>
+
+Information about the magic tool can be found on the following link: opencircuitdesign.com/magic/. This website will have a magic user guide ansome information about the technology file. A technology file is a file that has everything one needs to know about a process: layer type, colors, patterns, electrical connectivity, drc rules, ds generation rules, device extraction rules for generating netlists, rules for reading lef and def files, rules for interactive wiring... The website have a tech file manual. Clicking on the drc section will gives us information about the basic drc rules like edge rules, wiring spacing rules. In the case where non of these rules apply, magic has a sequence of geometrical manipulations where it applies operations such as boolean ones to produce results that can be passed back to the regular drc engine and treat it as an edge rule. These operators are found on the website as well.
+
+The drc rules being violated in the labs are found on the following link: https://skywater-pdk.readthedocs.io/en/main/rules/periphery.html
+
+To start the labs, I downloaded the needed files using:
+
+```
+wget http://opencircuitdesign.com/open_pdks/archive/drc_tests.tgz
+tar xfz drc_tests.tgz
+```
+
+and then start magic using:
+```
+magic -d XR
+```
+
+and open the mat3.mag file. To check the design drc rule violations, we can select one of the areas and write in the console:
+
+```
+drc why
+```
+To add a metal 3 selected area and check the via connections, the following commands are used:
+
+```
+paint met3
+cif see VIA2
+```
+
+we can check that the magic tool respects the drc rules such as a VIA2 must be enclosed by a specific area of metal 3. 
+
+The poly.mag file is loaded from the console using:
+
+```
+load poly.mag
+```
+
+This file shows several rules related to poly. Specifically, poly.9 shows a violation of the rule of a distance between poly and poly resistor of 0.48 um. However, this rule is not yet implemented in the tech file, so we need to add it ourselves by adding the following lines to the sky130A.tech file:
+
+```
+
+```
+
+Going back to the magic tool, we need to load the tech file and recheck the drc rule violation using:
+
+```
+tech load sky130A.tech
+drc check
+```
+
+This shows that the poly.9 example now shows a violations.
+
+
+
+</details>
+
 </details>
