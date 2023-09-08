@@ -2695,3 +2695,14 @@ This shows that the poly.9 example now shows a violations.
 </details>
 
 </details>
+
+
+## Day 20
+
+<details>
+<summary>Timing modelling using delay table</summary>
+
+
+
+
+</details>
