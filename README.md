@@ -2702,7 +2702,25 @@ This shows that the poly.9 example now shows a violations.
 <details>
 <summary>Timing modelling using delay table</summary>
 
+The minimal and abstracted information for routing about a design is provided to the tool by the Library Exchange Format (LEF) file. LEF file also serves the purpose of protecting intellectual property. To extract the lef using the magic tool, some requirements need to be fulfilled: inputs and outputs need to be at an intersection between horizontal and vertical tracks. These can be checked using the grid by showing the tracks through it. The grid is added in the tracks dimensions using the following command:
 
+```
+grid x-spacing y-spacing x-origin y-origin
+```
+
+These values can be found in the first 2 lines of the tracks.info file in the "open_pdks/sky130A/libs.tech/openlane/sky130_fd_sc_hd" as follows:
+
+```
+lil X x-origin x-spacing
+lil Y y-origin y-spacing
+```
+
+In this case, it is:
+
+```
+grid 0.46um 0.34um 0.23um 0.17um
+save sky130_vsdinv.mag
+```
 
 
 </details>
