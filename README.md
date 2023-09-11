@@ -2722,5 +2722,39 @@ grid 0.46um 0.34um 0.23um 0.17um
 save sky130_vsdinv.mag
 ```
 
+The length and width of the standard cell should also be odd multiples of the x and y pitches. From the grid, we can count the number of boxes the inner rectangle takes up, and we can see that I. this case it takes 7 boxes in length and 3 in width:
+
+
+In magic, ports are not specified. they are only important when we want to extract the lef file. these ports are defined as pins in magic by setting layers as ports. To do that:
+
+1- select the port using the mouse cursor.   
+2- click cell.   
+3- Click text.    
+4- fill in info as shown in this link: https://github.com/nickson-jose/vsdstdcelldesign/blob/master/README.md#create-port-definition.    
+5- define ports (as shown in the link https://github.com/nickson-jose/vsdstdcelldesign/blob/master/README.md#set-port-class-and-port-use-attributes-for-a-layout) by clicking on each area and then typing:
+```
+port class <inout/output>
+port use <signal(for in out)/power(for vpwr)/ground (for gnd)
+```
+
+After that, let's save the magic design in a new file:
+```
+save sky130_vsdinv.mag
+```
+then close the old design and reopenthe new design. In the new console, extract the lef using:
+```
+led write <name (default is original mag file name)
+```
+We then copy this led file to the picorv32a/src folder we were previously using.
+We also need to copy the liberty files from the vsdstdcelldesign folder to the picorv32a/src file using the following command:
+```
+cp sky130_vsdinv.mag <picorv32a_path>/picorv32a/src>
+cd libs
+cp sky130_fd_sc_hd__* <picorv32a_path>/picorv32a/src>
+```
+We would like to add this new inverter cell to the library. To do that, we need yo modify the design's config.tcl file and add the new cell's .lef file to the EXTRA_LEF varibale there:
+![d20 config add lef](https://github.com/walaa-amer/VSD-HDP/assets/85279771/8127da1b-22ad-405c-af87-8d757efe40c7)
+
+
 
 </details>
