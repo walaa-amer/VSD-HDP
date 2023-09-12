@@ -2738,7 +2738,7 @@ lil Y y-origin y-spacing
 ```
 
 In this case, it is:
-
+ 
 ```
 grid 0.46um 0.34um 0.23um 0.17um
 save sky130_vsdinv.mag
