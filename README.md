@@ -2702,6 +2702,9 @@ This shows that the poly.9 example now shows a violations.
 <details>
 <summary>Timing modelling using delay table</summary>
 
+<details>
+<summary>Openlane picorv32a with custom inverter cell</summary>
+
 The minimal and abstracted information for routing about a design is provided to the tool by the Library Exchange Format (LEF) file. LEF file also serves the purpose of protecting intellectual property. To extract the lef using the magic tool, some requirements need to be fulfilled: inputs and outputs need to be at an intersection between horizontal and vertical tracks. These can be checked using the grid by showing the tracks through it. The grid is added in the tracks dimensions using the following command:
 
 ```
@@ -2755,6 +2758,31 @@ cp sky130_fd_sc_hd__* <picorv32a_path>/picorv32a/src>
 We would like to add this new inverter cell to the library. To do that, we need yo modify the design's config.tcl file and add the new cell's .lef file to the EXTRA_LEF varibale there:
 ![d20 config add lef](https://github.com/walaa-amer/VSD-HDP/assets/85279771/8127da1b-22ad-405c-af87-8d757efe40c7)
 
+Then we will run the design on openlane using:
+```
+./flow.tcl -interactive
+package require openlane 0.9
+prep design picorv32a -tag 15-09_06-28 -overwrite #to overwrite the design
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+add_lefs -src $lefs
+run_synthesis
+```
+
+We notice a huge slack violation that needs to be corrected:
 
 
+</details>
+
+
+<details>
+<summary>Delay table</summary>
+
+An AND gate with a '1' input and an OR gate with a '0' input both work as buffers. In order to use one of them as a buffer in a clock tree though, we need to check the timing characteristics of both. Considering a 2-level clock tree (buffers are layered to disperse the capacitances):
+
+![d20 clock tree](https://github.com/walaa-amer/VSD-HDP/assets/85279771/845fd8b2-7fab-48f0-87ba-07b5bd7f3370)
+
+The output load at each level is varying from on level to another. So the output load at each buffer in the tree is not constant, which makes the input transition at different parts of the tree is not constant, which means there are different delays. This variation was represented in delay tables that match delays for specific output loads and input transitions for each type and size of a cell. Output loads or inout transitions that are not present in the table are extrapolated to find the delay. for each level we find the delay of the buffers and we add up the delays in a path to find the path's total delay value.
+
+
+</details>
 </details>
