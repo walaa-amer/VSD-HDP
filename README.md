@@ -2702,6 +2702,25 @@ This shows that the poly.9 example now shows a violations.
 <details>
 <summary>Timing modelling using delay table</summary>
 
+
+<details>
+<summary>Delay table</summary>
+
+An AND gate with a '1' input and an OR gate with a '0' input both work as buffers. In order to use one of them as a buffer in a clock tree though, we need to check the timing characteristics of both. Considering a 2-level clock tree (buffers are layered to disperse the capacitances):
+
+![d20 clock tree](https://github.com/walaa-amer/VSD-HDP/assets/85279771/845fd8b2-7fab-48f0-87ba-07b5bd7f3370)
+
+The output load at each level is varying from on level to another. So the output load at each buffer in the tree is not constant, which makes the input transition at different parts of the tree is not constant, which means there are different delays. This variation was represented in delay tables that match delays for specific output loads and input transitions for each type and size of a cell. Output loads or inout transitions that are not present in the table are extrapolated to find the delay (x9' in the case below). for each level we find the delay of the buffers and we add up the delays in a path to find the path's total delay value.
+
+![d20 delay tables](https://github.com/walaa-amer/VSD-HDP/assets/85279771/3b08be02-5b0c-47e4-9a8e-b05cf3bf1300)
+
+
+The fact that the buffers at each layer are running the same load and are of same size assures that the endpoints of the tree have a skew difference of 0 since they all have a delay of x9'+y15. This why itis important to make sure that these 2 requirements are fulfilled early on in the clock tree design to assure a correct timing analysis.
+
+The input transition of a buffer is also a function of the previous buffer's input transition and output capacitance, so there are delay tables to also find input transitions of buffers.
+
+</details>
+
 <details>
 <summary>Openlane picorv32a with custom inverter cell</summary>
 
@@ -2773,16 +2792,4 @@ We notice a huge slack violation that needs to be corrected:
 
 </details>
 
-
-<details>
-<summary>Delay table</summary>
-
-An AND gate with a '1' input and an OR gate with a '0' input both work as buffers. In order to use one of them as a buffer in a clock tree though, we need to check the timing characteristics of both. Considering a 2-level clock tree (buffers are layered to disperse the capacitances):
-
-![d20 clock tree](https://github.com/walaa-amer/VSD-HDP/assets/85279771/845fd8b2-7fab-48f0-87ba-07b5bd7f3370)
-
-The output load at each level is varying from on level to another. So the output load at each buffer in the tree is not constant, which makes the input transition at different parts of the tree is not constant, which means there are different delays. This variation was represented in delay tables that match delays for specific output loads and input transitions for each type and size of a cell. Output loads or inout transitions that are not present in the table are extrapolated to find the delay. for each level we find the delay of the buffers and we add up the delays in a path to find the path's total delay value.
-
-
-</details>
 </details>
