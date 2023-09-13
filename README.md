@@ -3,7 +3,7 @@
 ### Tools installed:
 <details>
 <summary>Yosys</summary>
- 
+
 Installed it following these steps:
 
 ```
