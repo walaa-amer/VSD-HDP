@@ -2930,8 +2930,3 @@ The algorithm builds a grid and locates the source and the target on the grid. T
 
 </details>
 
-<details>
-<summary>Triton features</summary>
-
-</details>
-
