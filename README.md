@@ -2855,7 +2855,7 @@ In the following orange case, the combinational delay is the wire delays between
 <summary>Clock Tree Synthesis</summary>
 
 <details>
-<summary>Ideal clocks</summary>
+<summary>Timing analysis with ideal clocks</summary>
 
 If 2 consecutive fipflops are connected to the same clock and kne of them is further from the clock, the H-Tree extends a wire to the middle point between the 2 flipflops and then from that point connect to the FFs, creating an almost zero skew.
 
@@ -2908,3 +2908,30 @@ delta1  and delta2 are computed in the following example:
 
 </details>
 </details>
+
+## Day 21
+
+<details>
+<summary>Routing and DRC</summary>
+
+One of the most famous routing algorithms is the Maze routing algoritm to connect 2 points in the best way possible.
+
+The algorithm builds a grid and locates the source and the target on the grid. The adjacents boxes to the source in the 4 directions are labelled as 1. The adjacents boxes to the 1s are 2s and so on, as shown in the figure below. We keep doing that until we reach the target. We then choose one of the paths that goes in incremental order from 1 to T with the least amount of bends in the connections.
+
+![d21 maze algo](https://github.com/walaa-amer/VSD-HDP/assets/85279771/2598eb87-8d1a-48ea-99a4-e8b818e57df8)
+
+3 typical design rules for a pair of wires is the minimum width of the wires, minimum pitch (distance between centers) between 2 wires, and minimum spacing between 2 wires. Another drc ruke is a signal short where 2 wires intersect. This rules can be fixed by putting the 2 wites on 2 different layers. this will induce the need to use vias. these vias also have width rules and spacing rules.
+
+
+</details>
+
+<details>
+<summary>Routing labs</summary>
+
+</details>
+
+<details>
+<summary>Triton features</summary>
+
+</details>
+
