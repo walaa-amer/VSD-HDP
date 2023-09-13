@@ -2865,7 +2865,7 @@ Another aspect of the clock tree is buffering. Buffering is used to shrink the l
 
 Clock nets are also shielded to break the coupling capacitances with other wires which can cause glitches which can cause extra delay.
 
-
+</details>
 <details>
 <summary>Labs STA with ideal clocks</summary>
 
