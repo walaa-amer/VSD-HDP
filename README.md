@@ -2765,9 +2765,9 @@ save sky130_vsdinv.mag
 ```
 then close the old design and reopenthe new design. In the new console, extract the lef using:
 ```
-led write <name (default is original mag file name)
+lef write <name (default is original mag file name)
 ```
-We then copy this led file to the picorv32a/src folder we were previously using.
+We then copy this lef file to the picorv32a/src folder we were previously using.
 We also need to copy the liberty files from the vsdstdcelldesign folder to the picorv32a/src file using the following command:
 ```
 cp sky130_vsdinv.mag <picorv32a_path>/picorv32a/src>
@@ -2776,6 +2776,15 @@ cp sky130_fd_sc_hd__* <picorv32a_path>/picorv32a/src>
 ```
 We would like to add this new inverter cell to the library. To do that, we need yo modify the design's config.tcl file and add the new cell's .lef file to the EXTRA_LEF varibale there:
 ![d20 config add lef](https://github.com/walaa-amer/VSD-HDP/assets/85279771/8127da1b-22ad-405c-af87-8d757efe40c7)
+
+Or add the following to the config.json file:
+```
+"LIB_SYNTH": "<picorv32a_path>/picorv32a/src/sky130_fd_sc_hd__typical.lib",
+"LIB_SLOWEST": "<picorv32a_path>/picorv32a/src/sky130_fd_sc_hd__slow.lib",
+"LIB_FASTEST": "<picorv32a_path>/picorv32a/src/sky130_fd_sc_hd__fast.lib",
+"LIB_TYPICAL": "<picorv32a_path>/picorv32a/src/sky130_fd_sc_hd__typical.lib",
+"EXTRA_LEFS": "<picorv32a_path>/picorv32a/src/sky130_vsdinv.lef",
+```
 
 Then we will run the design on openlane using:
 ```
