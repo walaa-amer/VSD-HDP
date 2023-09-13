@@ -2770,7 +2770,7 @@ lef write <name (default is original mag file name)
 We then copy this lef file to the picorv32a/src folder we were previously using.
 We also need to copy the liberty files from the vsdstdcelldesign folder to the picorv32a/src file using the following command:
 ```
-cp sky130_vsdinv.mag <picorv32a_path>/picorv32a/src>
+cp sky130_vsdinv.lef <picorv32a_path>/picorv32a/src>
 cd libs
 cp sky130_fd_sc_hd__* <picorv32a_path>/picorv32a/src>
 ```
@@ -2788,16 +2788,39 @@ Or add the following to the config.json file:
 
 Then we will run the design on openlane using:
 ```
+make mount
 ./flow.tcl -interactive
 package require openlane 0.9
-prep design picorv32a -tag 15-09_06-28 -overwrite #to overwrite the design
+prep design picorv32a -overwrite #to overwrite the design
 set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
 add_lefs -src $lefs
 run_synthesis
 ```
 
-We notice a huge slack violation that needs to be corrected:
+![d20 overwrite synth](https://github.com/walaa-amer/VSD-HDP/assets/85279771/8a37d179-afcb-4443-a3d3-4a0f78ca49b7)
 
+We can see that the merged.lef file in the specific run file contains the custom inverter cell. 
+
+In my case, there was no slack violation. However in the video, a huge slack violation that needeed to be corrected was noticed. It can be fixed by changing the configuration to optimize for delay and not area, by enabling buffering, and enabling cell sizing by running:
+
+```
+set ::env(SYNTH_STRATEGY) 1
+set ::env(SYNTH_BUFFERING) 1
+set ::env(SYNTH_SIZING) 1
+```
+
+To check and print a variable, use:
+```
+echo $::env(<name>)
+```
+We can use that to check the driving cell of inputs and choose one with small delay as well.
+
+We then run floorplan and placement:
+
+```
+run_floorplan
+run_placement
+```
 
 </details>
 
