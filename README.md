@@ -2767,6 +2767,8 @@ then close the old design and reopenthe new design. In the new console, extract 
 ```
 lef write <name (default is original mag file name)
 ```
+![d20 lef result](https://github.com/walaa-amer/VSD-HDP/assets/85279771/efce3aab-e827-4193-a40e-a93b91f2b81e)
+
 We then copy this lef file to the picorv32a/src folder we were previously using.
 We also need to copy the liberty files from the vsdstdcelldesign folder to the picorv32a/src file using the following command:
 ```
@@ -2799,7 +2801,10 @@ run_synthesis
 
 ![d20 overwrite synth](https://github.com/walaa-amer/VSD-HDP/assets/85279771/8a37d179-afcb-4443-a3d3-4a0f78ca49b7)
 
-We can see that the merged.lef file in the specific run file contains the custom inverter cell. 
+![d20 syntesis log](https://github.com/walaa-amer/VSD-HDP/assets/85279771/360411fc-4dd4-4021-bba5-f6701668b991)
+
+
+We can see that the merged.lef file in the specific run file contains the custom inverter cell and the synthesis mapping shows 81 custom cells mapped to the design.
 
 In my case, there was no slack violation. However in the video, a huge slack violation that needeed to be corrected was noticed. It can be fixed by changing the configuration to optimize for delay and not area, by enabling buffering, and enabling cell sizing by running:
 
@@ -2824,4 +2829,23 @@ run_placement
 
 </details>
 
+<details>
+<summary>Timing analysis with ideal clock</summary>
+
+In the ideal case, the time delay of a combinational circuit between 2 flipflops (theta) should be less than the clock period (T) since information between these 2 flipflops must be ready-> theta < T.   
+  
+The setup time (S) is the amount of time needed for the flipflop to pass the data for the first latch inside of it, for the data to be ready fo be passed to the other side of the flipflop at the clock tick -> theta < T-S.    
+
+Jitter is when a clock source delivers a clock rise in a time window surrounding the ideal case. This uncertainty is represented as SU -> theta < T-S-SU.
+
+![d20 setup time](https://github.com/walaa-amer/VSD-HDP/assets/85279771/f3eca503-6055-474d-a028-4c2af380dc65)
+
+
+In the following orange case, the combinational delay is the wire delays between FF1 and 1, 1 and 2, 2 and FF2 and the delays of 1 and 2. Timing analysis with ideal clocks will make sure the timing restriction is not violated.
+
+![d20 time analysis example](https://github.com/walaa-amer/VSD-HDP/assets/85279771/54802b28-26c2-47b2-a499-29db6790a447)
+
+
+
+</details>
 </details>
