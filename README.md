@@ -2828,6 +2828,7 @@ run_placement
 ```
 
 </details>
+</details>
 
 <details>
 <summary>Timing analysis with ideal clock</summary>
@@ -2846,6 +2847,4 @@ In the following orange case, the combinational delay is the wire delays between
 ![d20 time analysis example](https://github.com/walaa-amer/VSD-HDP/assets/85279771/54802b28-26c2-47b2-a499-29db6790a447)
 
 
-
-</details>
 </details>
