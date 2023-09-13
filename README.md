@@ -2833,6 +2833,8 @@ run_placement
 <details>
 <summary>Timing analysis with ideal clock</summary>
 
+### Setup timing analysis
+
 In the ideal case, the time delay of a combinational circuit between 2 flipflops (theta) should be less than the clock period (T) since information between these 2 flipflops must be ready-> theta < T.   
   
 The setup time (S) is the amount of time needed for the flipflop to pass the data for the first latch inside of it, for the data to be ready fo be passed to the other side of the flipflop at the clock tick -> theta < T-S.    
@@ -2847,4 +2849,62 @@ In the following orange case, the combinational delay is the wire delays between
 ![d20 time analysis example](https://github.com/walaa-amer/VSD-HDP/assets/85279771/54802b28-26c2-47b2-a499-29db6790a447)
 
 
+</details>
+
+<details>
+<summary>Clock Tree Synthesis</summary>
+
+<details>
+<summary>Ideal clocks</summary>
+
+If 2 consecutive fipflops are connected to the same clock and kne of them is further from the clock, the H-Tree extends a wire to the middle point between the 2 flipflops and then from that point connect to the FFs, creating an almost zero skew.
+
+Another aspect of the clock tree is buffering. Buffering is used to shrink the length of wires. Repeaters are added to decrease the resistance and capacitance of the wire. 
+
+![d20 h clock tree](https://github.com/walaa-amer/VSD-HDP/assets/85279771/3a38475d-d7ca-4792-ac57-dcfe57808952)
+
+Clock nets are also shielded to break the coupling capacitances with other wires which can cause glitches which can cause extra delay.
+
+
+<details>
+<summary>Labs STA with ideal clocks</summary>
+
+</details>
+<details>
+<summary>Timing analysis with real clocks</summary>
+
+### Setup timing analysis
+
+The addition of buffers creates skew between the launch and the capture flops. Buffering adds delta1 time for the clock to arrive to F1 and adds delta2 time for the clock signal to arrive to F2 -> theta+d1 < T+d2-S-SU.
+
+theta+d1 is the data arrival time and T+d2-S-SU is the data required time.
+
+Slack = data required time - data rarrival time.
+
+
+
+### Hold timing analysis
+
+Hold time is the amount of time the flop needs to pass the data through its second latch, so it is the amount of time the flop need the combinational circuit to hold the data to pass it correctly -> theta > H.
+
+Considering uncertainty and buffering delay -> theta +d1 > H+d2+HU.
+
+theta+d1 is the data arrival time and H+d2-HU is the data required time.
+
+Slack = data arrival time - data required time.
+
+![d20 setup time](https://github.com/walaa-amer/VSD-HDP/assets/85279771/af02a15d-f558-43c1-86c3-8bf47b626663)
+
+delta1  and delta2 are computed in the following example:
+
+![d20 sta example](https://github.com/walaa-amer/VSD-HDP/assets/85279771/668db813-cee5-4f5d-9740-e7bda6a3162f)
+
+
+
+</details>
+
+<details>
+<summary>Labs STA with real clocks</summary>
+
+</details>
 </details>
